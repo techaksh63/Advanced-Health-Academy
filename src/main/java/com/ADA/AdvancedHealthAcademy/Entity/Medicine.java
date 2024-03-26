@@ -17,6 +17,12 @@ public class Medicine {
 
     public Medicine() {
     }
+    public Medicine( String medicineName, String medicinePower, int dosage, int frequency) {
+        this.medicineName = medicineName;
+        this.medicinePower = medicinePower;
+        this.dosage = dosage;
+        this.frequency = frequency;
+    }
     public Medicine(long id, String medicineName, String medicinePower, int dosage, int frequency) {
         this.medicineId = id;
         this.medicineName = medicineName;
