@@ -5,20 +5,37 @@ import com.ADA.AdvancedHealthAcademy.Service.PrescriptionsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/prescription")
 public class PrescriptionController {
     @Autowired
-    private PrescriptionsService service;
+    private PrescriptionsService prescriptionsService;
 
     @PostMapping
     public ResponseEntity<Prescriptions> addPrescription(@RequestBody Prescriptions prescriptions) {
-        service.savePrescription(prescriptions);
-        return new ResponseEntity<Prescriptions>(service.savePrescription(prescriptions), HttpStatus.CREATED);
+        prescriptionsService.savePrescription(prescriptions);
+        return new ResponseEntity<Prescriptions>(prescriptionsService.savePrescription(prescriptions), HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Prescriptions>> getAllPrescription(){
+        List<Prescriptions> prescriptions = prescriptionsService.AllPrescription();
+        return ResponseEntity.ok(prescriptions);
+    }
+
+    @GetMapping("/{prescriptionId}")
+    private ResponseEntity<Prescriptions> findPrescriptionById(@PathVariable Long prescriptionId){
+        return prescriptionsService.findPrescriptionById(prescriptionId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+    @DeleteMapping("/{prescriptionId}")
+    private ResponseEntity<Void> deletePrescriptionById(@PathVariable Long prescriptionId){
+        prescriptionsService.deletePrescriptionById(prescriptionId);
+        return ResponseEntity.noContent().build();
     }
 }
