@@ -12,23 +12,32 @@ public class Medicine {
     private long medicineId;
     private String medicineName;
     private String medicinePower;
-    private int dosage;
-    private int frequency;
+    @Column(name = "Frequency (MN-AF-EN-NT)")
+    private String frequency;
+    @Column(name = "Consume (Af or Bf)")
+    private String dosage;
+    private String duration;
+    private String Quantity;
 
     public Medicine() {
     }
-    public Medicine( String medicineName, String medicinePower, int dosage, int frequency) {
+
+    public Medicine(String medicineName, String medicinePower, String frequency, String dosage, String duration, String quantity) {
         this.medicineName = medicineName;
         this.medicinePower = medicinePower;
-        this.dosage = dosage;
         this.frequency = frequency;
+        this.dosage = dosage;
+        this.duration = duration;
+        Quantity = quantity;
     }
-    public Medicine(long id, String medicineName, String medicinePower, int dosage, int frequency) {
-        this.medicineId = id;
+    public Medicine(long medicineId, String medicineName, String medicinePower, String frequency, String dosage, String duration, String quantity) {
+        this.medicineId = medicineId;
         this.medicineName = medicineName;
         this.medicinePower = medicinePower;
-        this.dosage = dosage;
         this.frequency = frequency;
+        this.dosage = dosage;
+        this.duration = duration;
+        Quantity = quantity;
     }
 
     public long getMedicineId() {
@@ -55,19 +64,35 @@ public class Medicine {
         this.medicinePower = medicinePower;
     }
 
-    public int getDosage() {
-        return dosage;
-    }
-
-    public void setDosage(int dosage) {
-        this.dosage = dosage;
-    }
-
-    public int getFrequency() {
+    public String getFrequency() {
         return frequency;
     }
 
-    public void setFrequency(int frequency) {
+    public void setFrequency(String frequency) {
         this.frequency = frequency;
+    }
+
+    public String getDosage() {
+        return dosage;
+    }
+
+    public void setDosage(String dosage) {
+        this.dosage = dosage;
+    }
+
+    public String getDuration() {
+        return duration;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
+    }
+
+    public String getQuantity() {
+        return Quantity;
+    }
+
+    public void setQuantity(String quantity) {
+        Quantity = quantity;
     }
 }

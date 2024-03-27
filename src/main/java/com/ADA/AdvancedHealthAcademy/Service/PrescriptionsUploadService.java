@@ -5,7 +5,6 @@ import com.ADA.AdvancedHealthAcademy.Entity.Prescriptions;
 import com.ADA.AdvancedHealthAcademy.Entity.PrescriptionsUpload;
 import com.ADA.AdvancedHealthAcademy.Repository.PrescriptionsRepository;
 import com.ADA.AdvancedHealthAcademy.Repository.PrescriptionsUploadRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
 import org.json.JSONArray;
@@ -16,8 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +28,7 @@ public class PrescriptionsUploadService {
     @Autowired
     private PrescriptionsUploadRepository prescriptionsUploadRepository;
     @Autowired
-    private PrescriptionsRepository prescriptionsRepository;
+    private final PrescriptionsRepository prescriptionsRepository;
 
     public PrescriptionsUploadService(PrescriptionsRepository prescriptionsRepository) {
         this.prescriptionsRepository = prescriptionsRepository;
@@ -38,19 +37,18 @@ public class PrescriptionsUploadService {
         return prescriptionsUploadRepository.save(prescription);
     }
 
+
     public Prescriptions addPrescription(MultipartFile file) throws Exception {
         String text = OCR(file);
-
         JSONObject JsonOutput = convertTextToJson(text);
-        System.out.println(JsonOutput);
-
-
         Prescriptions savedPrescription = savePrescriptionFromJson(String.valueOf(JsonOutput));
-        System.out.println(savedPrescription);
+
         return savedPrescription;
     }
 
-     private String OCR(MultipartFile file)throws IOException, TesseractException{
+
+
+     private String OCR(MultipartFile file)throws TesseractException{
         String text = null;
         Tesseract tesseract = new Tesseract( ) ;
         try {
@@ -70,60 +68,89 @@ public class PrescriptionsUploadService {
 
 
 
+
     private JSONObject convertTextToJson(String text) throws JSONException {
-        org.json.JSONObject jsonData = new org.json.JSONObject();
+        JSONObject jsonData = new JSONObject();
+
         String[] lines = text.split("\n");
-        List<org.json.JSONObject> medicineList = new ArrayList<>();
-
         for (String line : lines) {
-            String[] parts = line.trim().split("=", 2);
-
+            String[] parts = line.trim().split(":", 2);
             if (parts.length == 2) {
                 String key = parts[0].trim();
                 String value = parts[1].trim();
 
-                if (key.startsWith("Medicine")) {
-                    String[] medicineDetails = value.split(":");
-                    if (medicineDetails.length == 4) {
-                        org.json.JSONObject medicineJson = new JSONObject();
-                        medicineJson.put("medicineName", medicineDetails[0].trim());
-                        medicineJson.put("medicinePower", medicineDetails[1].trim());
-                        medicineJson.put("dosage", Integer.parseInt(medicineDetails[2].trim()));
-                        medicineJson.put("frequency", Integer.parseInt(medicineDetails[3].trim()));
-                        medicineList.add(medicineJson);
-                    }
+                if (key.equals("Doctor")) {
+                    // Extract doctor name and mobile number
+                    String[] doctorInfo = value.split(" \\(");
+                    jsonData.put("Doctor Name", doctorInfo[0]);
+                    jsonData.put("Doctor Mo.", doctorInfo[1].replace(")", ""));
                 } else {
                     jsonData.put(key, value);
                 }
             }
         }
-        jsonData.put("medicine", new JSONArray(medicineList));
+
+        boolean isMedicineSection = false;
+        JSONArray medicineArray = new JSONArray();
+        for (String line : lines) {
+            if (line.isBlank()) {
+                isMedicineSection = true;
+                continue;
+            }
+
+            if (isMedicineSection) {
+                String[] medicineDetails = line.trim().split("\\|");
+                if (medicineDetails.length == 6) {
+                    JSONObject medicineJson = getJsonObject(medicineDetails);
+                    medicineArray.put(medicineJson);
+                }
+            }
+        }
+
+        jsonData.put("Medicine", medicineArray);
+        System.out.println(jsonData);
         return jsonData;
+    }
+    private static JSONObject getJsonObject(String[] medicineDetails) throws JSONException {
+        JSONObject medicineJson = new JSONObject();
+        medicineJson.put("Medicine Name", medicineDetails[0].trim());
+        medicineJson.put("Medicine Power", medicineDetails[1].trim());
+        medicineJson.put("Frequency (MN-AF-EN-NT)", medicineDetails[2].trim());
+        medicineJson.put("Consume (Af or Bf)", medicineDetails[3].trim());
+        medicineJson.put("Duration", medicineDetails[4].trim());
+        medicineJson.put("Quantity", medicineDetails[5].trim());
+        return medicineJson;
     }
 
 
-    private Prescriptions savePrescriptionFromJson(String jsonData) throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
+
+    public Prescriptions savePrescriptionFromJson(String jsonData) throws Exception {
         JSONObject jsonObject = new JSONObject(jsonData);
-
         Prescriptions prescription = new Prescriptions();
-        prescription.setDoctorName(jsonObject.getString("Doctor"));
-        prescription.setInstruction(jsonObject.getString("Instruction"));
 
-        JSONArray medicineArray = jsonObject.getJSONArray("medicine");
+        prescription.setDoctorName(jsonObject.getString("Doctor Name"));
+        prescription.setDoctorMobileNumber(jsonObject.getString("Doctor Mo."));
+
+        prescription.setPatientName(jsonObject.getString("Patient"));
+        prescription.setPatientMobileNumber(jsonObject.getString("Patient Mo."));
+        prescription.setDiagnosis(jsonObject.getString("Diagnosis"));
+        prescription.setDate(LocalDate.parse(jsonObject.getString("Date")));
+
+        JSONArray medicineArray = jsonObject.getJSONArray("Medicine");
         List<Medicine> medicines = new ArrayList<>();
         for (int i = 0; i < medicineArray.length(); i++) {
             JSONObject medicineJson = medicineArray.getJSONObject(i);
             Medicine medicine = new Medicine(
-                    medicineJson.getString("medicineName"),
-                    medicineJson.getString("medicinePower"),
-                    medicineJson.getInt("dosage"),
-                    medicineJson.getInt("frequency")
+                    medicineJson.getString("Medicine Name"),
+                    medicineJson.getString("Medicine Power"),
+                    medicineJson.getString("Frequency (MN-AF-EN-NT)"),
+                    medicineJson.getString("Consume (Af or Bf)"),
+                    medicineJson.getString("Duration"),
+                    medicineJson.getString("Quantity")
             );
             medicines.add(medicine);
         }
         prescription.setMedicine(medicines);
-
         Prescriptions savedPrescription = prescriptionsRepository.save(prescription);
         return savedPrescription;
     }
