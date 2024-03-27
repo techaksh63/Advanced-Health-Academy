@@ -1,33 +1,34 @@
 package com.ADA.AdvancedHealthAcademy.Entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-
 
 @Entity
 @Table(name = "Prescriptions")
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class Prescriptions {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String doctorName;
-    @JdbcTypeCode(SqlTypes.JSON)
-    private Map<String,Object> information;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "prescriptionId",referencedColumnName = "id")
     private List<Medicine> medicine;
+    private String instruction;
     private Date date = new Date();
+
+    public Prescriptions() {
+    }
+    public Prescriptions(long id, String doctorName, List<Medicine> medicine, String instruction, Date date) {
+        this.id = id;
+        this.doctorName = doctorName;
+        this.medicine = medicine;
+        this.instruction = instruction;
+        this.date = date;
+    }
 
     public long getId() {
         return id;
@@ -45,14 +46,6 @@ public class Prescriptions {
         this.doctorName = doctorName;
     }
 
-    public Map<String, Object> getInformation() {
-        return information;
-    }
-
-    public void setInformation(Map<String, Object> information) {
-        this.information = information;
-    }
-
     public List<Medicine> getMedicine() {
         return medicine;
     }
@@ -61,11 +54,16 @@ public class Prescriptions {
         this.medicine = medicine;
     }
 
+    public String getInstruction() {
+        return instruction;
+    }
+
+    public void setInstruction(String instruction) {
+        this.instruction = instruction;
+    }
+
     public Date getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
-    }
 }
