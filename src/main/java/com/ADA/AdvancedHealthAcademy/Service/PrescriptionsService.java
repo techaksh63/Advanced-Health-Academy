@@ -3,7 +3,6 @@ package com.ADA.AdvancedHealthAcademy.Service;
 import com.ADA.AdvancedHealthAcademy.Entity.Prescriptions;
 import com.ADA.AdvancedHealthAcademy.Repository.PrescriptionsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
