@@ -1,8 +1,6 @@
 package com.ADA.AdvancedHealthAcademy.Entity;
 
 import jakarta.persistence.*;
-import org.springframework.data.annotation.CreatedDate;
-
 import java.sql.Blob;
 import java.util.Date;
 

@@ -37,15 +37,24 @@ public class PrescriptionsUploadService {
         return prescriptionsUploadRepository.save(prescription);
     }
 
-
     public Prescriptions addPrescription(MultipartFile file) throws Exception {
-        String text = OCR(file);
-        JSONObject JsonOutput = convertTextToJson(text);
-        Prescriptions savedPrescription = savePrescriptionFromJson(String.valueOf(JsonOutput));
+        String text;
+        try {
+            text = OCR(file);
+        } catch (TesseractException | RuntimeException e) {
+            throw new Exception("Error during OCR processing: " + e.getMessage());
+        }
 
+        JSONObject JsonOutput;
+        try {
+            JsonOutput = convertTextToJson(text);
+        } catch (JSONException e) {
+            throw new Exception("Error converting text to JSON: " + e.getMessage());
+        }
+
+        Prescriptions savedPrescription = savePrescriptionFromJson(String.valueOf(JsonOutput));
         return savedPrescription;
     }
-
 
 
      private String OCR(MultipartFile file)throws TesseractException{
@@ -59,11 +68,10 @@ public class PrescriptionsUploadService {
             return text;
         }
         catch ( TesseractException e ) {
-            e.printStackTrace( ) ;
+            throw e ;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        return "Error";
     }
 
 
@@ -80,7 +88,6 @@ public class PrescriptionsUploadService {
                 String value = parts[1].trim();
 
                 if (key.equals("Doctor")) {
-                    // Extract doctor name and mobile number
                     String[] doctorInfo = value.split(" \\(");
                     jsonData.put("Doctor Name", doctorInfo[0]);
                     jsonData.put("Doctor Mo.", doctorInfo[1].replace(")", ""));
@@ -108,7 +115,6 @@ public class PrescriptionsUploadService {
         }
 
         jsonData.put("Medicine", medicineArray);
-        System.out.println(jsonData);
         return jsonData;
     }
     private static JSONObject getJsonObject(String[] medicineDetails) throws JSONException {
@@ -125,7 +131,12 @@ public class PrescriptionsUploadService {
 
 
     public Prescriptions savePrescriptionFromJson(String jsonData) throws Exception {
-        JSONObject jsonObject = new JSONObject(jsonData);
+        JSONObject jsonObject;
+        try {
+            jsonObject = new JSONObject(jsonData);
+        } catch (JSONException e) {
+            throw new Exception("Error parsing JSON data: " + e.getMessage());
+        }
         Prescriptions prescription = new Prescriptions();
 
         prescription.setDoctorName(jsonObject.getString("Doctor Name"));
@@ -151,7 +162,12 @@ public class PrescriptionsUploadService {
             medicines.add(medicine);
         }
         prescription.setMedicine(medicines);
-        Prescriptions savedPrescription = prescriptionsRepository.save(prescription);
+        Prescriptions savedPrescription;
+        try {
+            savedPrescription = prescriptionsRepository.save(prescription);
+        } catch (Exception e) {
+            throw new Exception("Error saving prescription to database: " + e.getMessage());
+        }
         return savedPrescription;
     }
 
