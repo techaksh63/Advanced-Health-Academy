@@ -63,7 +63,7 @@ public class PrescriptionsUploadService {
         try {
             tesseract.setDatapath( "Tess4J/tessdata" ) ;
             BufferedImage image = ImageIO.read(file.getInputStream());
-            text = tesseract.doOCR(image) ;
+            text = tesseract.doOCR(image);
 
             return text;
         }

@@ -5,109 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="40cf8059-6a37-47fa-ab95-35e90c56dc95" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/build.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/dist/README.TXT" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/dist/tess4j-3.4.8.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/lib/commons-beanutils-1.9.2.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/lib/commons-io-2.6.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/lib/commons-logging-1.2.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/lib/fontbox-2.0.9.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/lib/ghost4j-1.0.1.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/lib/hamcrest-core-1.3.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/lib/itext-2.1.7.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/lib/jai-imageio-core-1.4.0.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/lib/jbig2-imageio-3.0.0.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/lib/jboss-vfs-3.2.12.Final.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/lib/jcl-over-slf4j-1.7.25.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/lib/jna-4.1.0.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/lib/jul-to-slf4j-1.7.25.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/lib/junit-4.12.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/lib/lept4j-1.6.4.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/lib/log4j-1.2.17.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/lib/log4j-over-slf4j-1.7.25.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/lib/logback-classic-1.2.3.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/lib/logback-core-1.2.3.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/lib/nblibraries.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/lib/pdfbox-2.0.9.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/lib/pdfbox-tools-2.0.9.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/lib/slf4j-api-1.7.25.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/lib/win32-x86-64/libtesseract3051.dll" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/lib/win32-x86/libtesseract3051.dll" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/lib/xmlgraphics-commons-1.5.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/nbproject/build-impl.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/nbproject/genfiles.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/nbproject/private/config.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/nbproject/private/private.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/nbproject/private/private.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/nbproject/project.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/nbproject/project.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/readme.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/src/com/recognition/software/jdeskew/ImageDeskew.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/src/com/recognition/software/jdeskew/ImageUtil.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/src/net/sourceforge/tess4j/ITessAPI.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/src/net/sourceforge/tess4j/ITesseract.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/src/net/sourceforge/tess4j/TessAPI.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/src/net/sourceforge/tess4j/TessAPI1.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/src/net/sourceforge/tess4j/Tesseract.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/src/net/sourceforge/tess4j/Tesseract1.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/src/net/sourceforge/tess4j/TesseractException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/src/net/sourceforge/tess4j/Word.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/src/net/sourceforge/tess4j/util/ImageHelper.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/src/net/sourceforge/tess4j/util/ImageIOHelper.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/src/net/sourceforge/tess4j/util/LoadLibs.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/src/net/sourceforge/tess4j/util/LoggHelper.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/src/net/sourceforge/tess4j/util/LoggerConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/src/net/sourceforge/tess4j/util/PdfBoxUtilities.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/src/net/sourceforge/tess4j/util/PdfGsUtilities.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/src/net/sourceforge/tess4j/util/PdfUtilities.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/src/net/sourceforge/tess4j/util/Utils.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/tessdata/configs/api_config" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/tessdata/configs/digits" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/tessdata/configs/hocr" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/tessdata/eng.traineddata" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/tessdata/osd.traineddata" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/tessdata/pdf.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/tessdata/pdf.ttx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/test/log4j.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/test/net/sourceforge/tess4j/ProgressMonitor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/test/net/sourceforge/tess4j/TessAPI1Test.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/test/net/sourceforge/tess4j/TessAPIImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/test/net/sourceforge/tess4j/TessAPITest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/test/net/sourceforge/tess4j/Tesseract1Test.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/test/net/sourceforge/tess4j/TesseractTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/test/net/sourceforge/tess4j/TestFolderExtraction.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/test/net/sourceforge/tess4j/Word.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/test/net/sourceforge/tess4j/util/PdfUtilitiesTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/test/resources/test-data/eurotext.bmp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/test/resources/test-data/eurotext.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/test/resources/test-data/eurotext.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/test/resources/test-data/eurotext.tif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/test/resources/test-data/eurotext_deskew.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/test/resources/test-data/eurotext_unlv.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/test/resources/test-data/eurotext_unlv.uzn" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/test/resources/test-data/multipage-pdf.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tess4J/versionchanges.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/mvnw" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/mvnw.cmd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ADA/AdvancedHealthAcademy/AdvancedHealthAcademyApplication.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ADA/AdvancedHealthAcademy/Controller/PrescriptionController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ADA/AdvancedHealthAcademy/Controller/PrescriptionsUploadController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ADA/AdvancedHealthAcademy/Entity/Medicine.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ADA/AdvancedHealthAcademy/Entity/Prescriptions.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ADA/AdvancedHealthAcademy/Entity/PrescriptionsUpload.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ADA/AdvancedHealthAcademy/Exceptions/ResourceNotFoundException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ADA/AdvancedHealthAcademy/Exceptions/UploadException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ADA/AdvancedHealthAcademy/Repository/PrescriptionsRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ADA/AdvancedHealthAcademy/Repository/PrescriptionsUploadRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ADA/AdvancedHealthAcademy/Service/PrescriptionsService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ADA/AdvancedHealthAcademy/Service/PrescriptionsUploadService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application-dev.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/ADA/AdvancedHealthAcademy/AdvancedHealthAcademyApplicationTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PrescriptionUpload/src/main/java/com/ADA/AdvancedHealthAcademy/AdvancedHealthAcademyApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/PrescriptionUpload/src/com/ADA/AdvancedHealthAcademy/AdvancedHealthAcademyApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PrescriptionUpload/src/main/java/com/ADA/AdvancedHealthAcademy/Controller/PrescriptionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/PrescriptionUpload/src/com/ADA/AdvancedHealthAcademy/Controller/PrescriptionController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PrescriptionUpload/src/main/java/com/ADA/AdvancedHealthAcademy/Controller/PrescriptionsUploadController.java" beforeDir="false" afterPath="$PROJECT_DIR$/PrescriptionUpload/src/com/ADA/AdvancedHealthAcademy/Controller/PrescriptionsUploadController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PrescriptionUpload/src/main/java/com/ADA/AdvancedHealthAcademy/Entity/Medicine.java" beforeDir="false" afterPath="$PROJECT_DIR$/PrescriptionUpload/src/com/ADA/AdvancedHealthAcademy/Entity/Medicine.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PrescriptionUpload/src/main/java/com/ADA/AdvancedHealthAcademy/Entity/Prescriptions.java" beforeDir="false" afterPath="$PROJECT_DIR$/PrescriptionUpload/src/com/ADA/AdvancedHealthAcademy/Entity/Prescriptions.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PrescriptionUpload/src/main/java/com/ADA/AdvancedHealthAcademy/Entity/PrescriptionsUpload.java" beforeDir="false" afterPath="$PROJECT_DIR$/PrescriptionUpload/src/com/ADA/AdvancedHealthAcademy/Entity/PrescriptionsUpload.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PrescriptionUpload/src/main/java/com/ADA/AdvancedHealthAcademy/Exceptions/ResourceNotFoundException.java" beforeDir="false" afterPath="$PROJECT_DIR$/PrescriptionUpload/src/com/ADA/AdvancedHealthAcademy/Exceptions/ResourceNotFoundException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PrescriptionUpload/src/main/java/com/ADA/AdvancedHealthAcademy/Exceptions/UploadException.java" beforeDir="false" afterPath="$PROJECT_DIR$/PrescriptionUpload/src/com/ADA/AdvancedHealthAcademy/Exceptions/UploadException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PrescriptionUpload/src/main/java/com/ADA/AdvancedHealthAcademy/Repository/PrescriptionsRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/PrescriptionUpload/src/com/ADA/AdvancedHealthAcademy/Repository/PrescriptionsRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PrescriptionUpload/src/main/java/com/ADA/AdvancedHealthAcademy/Repository/PrescriptionsUploadRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/PrescriptionUpload/src/com/ADA/AdvancedHealthAcademy/Repository/PrescriptionsUploadRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PrescriptionUpload/src/main/java/com/ADA/AdvancedHealthAcademy/Service/PrescriptionsService.java" beforeDir="false" afterPath="$PROJECT_DIR$/PrescriptionUpload/src/com/ADA/AdvancedHealthAcademy/Service/PrescriptionsService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PrescriptionUpload/src/main/java/com/ADA/AdvancedHealthAcademy/Service/PrescriptionsUploadService.java" beforeDir="false" afterPath="$PROJECT_DIR$/PrescriptionUpload/src/com/ADA/AdvancedHealthAcademy/Service/PrescriptionsUploadService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -152,7 +62,10 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/home/qtech/Desktop/Aksh/Project/AdvancedHealthAcademy"
+    "last_opened_file_path": "/home/qtech/Desktop/Aksh/OCR",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0"
   }
 }]]></component>
   <component name="RecentsManager">
