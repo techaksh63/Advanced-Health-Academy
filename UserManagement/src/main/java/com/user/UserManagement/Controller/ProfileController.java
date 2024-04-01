@@ -1,5 +1,6 @@
 package com.user.UserManagement.Controller;
 
+import com.user.UserManagement.DTO.ProfileInfoDTO;
 import com.user.UserManagement.Entity.Profile;
 import com.user.UserManagement.Exception.UserNotFoundException;
 import com.user.UserManagement.Service.ProfileService;
@@ -28,7 +29,7 @@ public class ProfileController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getProfileById(@PathVariable long userId) {
+    public ResponseEntity<?> getProfilesByUserId(@PathVariable long userId) {
         try {
             Optional<List<Profile>> Profile = profileService.getProfileById(userId);
             if (Profile.isPresent()) {
@@ -42,6 +43,23 @@ public class ProfileController {
             throw new RuntimeException(e);
         }
     }
+
+    @GetMapping("/all")
+    public ResponseEntity<?> getProfilesInfoByUserId(@PathVariable long userId) {
+        try {
+            Optional<List<ProfileInfoDTO>> profiles = profileService.getAllProfilesInfo(userId);
+            if (profiles.isPresent()) {
+                return new ResponseEntity<>(profiles.get(), HttpStatus.OK);
+            } else {
+                throw new UserNotFoundException("User details for user ID " + userId + " not found");
+            }
+        } catch (UserNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
 //    @PutMapping
 //    public ResponseEntity<?> updateProfile(@PathVariable long userId, @RequestBody Profile Profile) {

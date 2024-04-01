@@ -12,14 +12,14 @@ public class UserDTO {
     private String email;
     private String userMobileNumber;
     private String address;
-    private int totalFamilyMembers;
+    private Integer totalFamilyMembers;
     private LocalDate date = LocalDate.now();
     private List<Profile> profile;
 
     public UserDTO(){
     }
 
-    public UserDTO(Long userId, String userName, String password, String email, String userMobileNumber, String address, int totalFamilyMembers, LocalDate date, List<Profile> profile) {
+    public UserDTO(Long userId, String userName, String password, String email, String userMobileNumber, String address, Integer totalFamilyMembers, LocalDate date, List<Profile> profile) {
         this.userId = userId;
         this.userName = userName;
         this.password = password;
@@ -30,6 +30,7 @@ public class UserDTO {
         this.date = date;
         this.profile = profile;
     }
+
 
     public Long getUserId() {
         return userId;
@@ -79,11 +80,11 @@ public class UserDTO {
         this.address = address;
     }
 
-    public int getTotalFamilyMembers() {
+    public Integer getTotalFamilyMembers() {
         return totalFamilyMembers;
     }
 
-    public void setTotalFamilyMembers(int totalFamilyMembers) {
+    public void setTotalFamilyMembers(Integer totalFamilyMembers) {
         this.totalFamilyMembers = totalFamilyMembers;
     }
 

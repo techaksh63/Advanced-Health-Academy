@@ -1,5 +1,6 @@
 package com.user.UserManagement.Service;
 
+import com.user.UserManagement.Entity.Profile;
 import com.user.UserManagement.Entity.User;
 import com.user.UserManagement.Repository.ProfileRepository;
 import com.user.UserManagement.Repository.UserRepository;
@@ -21,6 +22,9 @@ public class UserService {
 
     public User createUser(User user) throws Exception {
         try {
+            for (Profile profile : user.getProfile()) {
+                profile.setUser(user);
+            }
             return userRepository.save(user);
         } catch (DataAccessException e) {
             throw new Exception("Error Registering User: " + e.getMessage());

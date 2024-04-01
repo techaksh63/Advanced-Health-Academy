@@ -28,12 +28,12 @@ public class User {
         @Column(nullable = false)
         private LocalDate date = LocalDate.now();
         @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-        private Profile profile;
+        private List<Profile> profile;
 
         public User() {
         }
 
-        public User(Long userId, String userName, String password, String email, String userMobileNumber, String address, int totalFamilyMembers, LocalDate date, Profile profile) {
+        public User(Long userId, String userName, String password, String email, String userMobileNumber, String address, int totalFamilyMembers, LocalDate date, List<Profile> profile) {
                 this.userId = userId;
                 this.userName = userName;
                 this.password = password;
@@ -44,7 +44,6 @@ public class User {
                 this.date = date;
                 this.profile = profile;
         }
-
         public Long getUserId() {
                 return userId;
         }
@@ -109,11 +108,12 @@ public class User {
                 this.date = date;
         }
 
-        public Profile getProfile() {
+
+        public List<Profile> getProfile() {
                 return profile;
         }
 
-        public void setProfile(Profile profile) {
+        public void setProfile(List<Profile> profile) {
                 this.profile = profile;
         }
 }

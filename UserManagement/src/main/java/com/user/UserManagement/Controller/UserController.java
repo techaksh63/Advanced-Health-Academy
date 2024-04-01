@@ -37,19 +37,19 @@ public class UserController {
         }
 
     }
-    @GetMapping
-    public ResponseEntity<?> getAllUsers() throws Exception {
-        try {
-            List<User> users = userService.getAllUsers();
-            List<Profile> profiles = profileService.getAllProfiles();
-
-            List<UserDTO> usersDTO = new ArrayList<>();
-
-            return ResponseEntity.ok(usersDTO);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
-    }
+//    @GetMapping
+//    public ResponseEntity<?> getAllUsers() throws Exception {
+//        try {
+//            List<User> users = userService.getAllUsers();
+//            List<Profile> profiles = profileService.getAllProfiles();
+//
+//            List<UserDTO> usersDTO = new ArrayList<>();
+//
+//            return ResponseEntity.ok(usersDTO);
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+//        }
+//    }
 
     @GetMapping("/{userId}")
     public ResponseEntity<?> getUserById(@PathVariable long userId) {

@@ -1,9 +1,11 @@
 package com.user.UserManagement.Service;
 
+import com.user.UserManagement.DTO.ProfileInfoDTO;
 import com.user.UserManagement.Entity.User;
 import com.user.UserManagement.Entity.Profile;
 import com.user.UserManagement.Repository.ProfileRepository;
 import com.user.UserManagement.Repository.UserRepository;
+import com.user.UserManagement.Utils.Converter.Entity_To_DTO.ProfileConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.crossstore.ChangeSetPersister;
@@ -14,7 +16,8 @@ import java.util.Optional;
 
 @Service
 public class ProfileService {
-
+@Autowired
+private ProfileConverter profileConverter;
     @Autowired
     private ProfileRepository profileRepository;
     @Autowired
@@ -34,21 +37,37 @@ public class ProfileService {
         }
     }
 
-    public List<Profile> getAllProfiles() throws Exception {
-        try {
-            return profileRepository.findAll();
-        } catch (DataAccessException e) {
-            throw new Exception("Error retrieving all profile: " + e.getMessage());
-        }
-    }
+//    public List<Profile> getAllProfiles() throws Exception {
+//        try {
+//            return profileRepository.findAll();
+//        } catch (DataAccessException e) {
+//            throw new Exception("Error retrieving all profile: " + e.getMessage());
+//        }
+//    }
 
     public Optional<List<Profile>> getProfileById(long userId) throws Exception {
         try {
-            return Optional.ofNullable(profileRepository.findByUserid(userId));
+            return Optional.ofNullable(profileRepository.findProfileAllByUserid(userId));
         } catch (DataAccessException e) {
             throw new Exception("Error finding Profile by ID: " + e.getMessage());
         }
     }
+
+    public Optional<List<ProfileInfoDTO>> getAllProfilesInfo(long userId)throws Exception{
+        try {
+
+            List<Profile> profile = profileRepository.findProfileAllByUserid(userId);
+            List<Object> profiles = profileRepository.findProfileInfoByUserid(userId);
+            Optional<List<ProfileInfoDTO>> profileInfoDTO = profileConverter.entitiesToProfileInfoDTOs(profile);
+
+            return profileInfoDTO;
+        } catch (DataAccessException e) {
+            throw new Exception("Error retrieving all profiles: " + e.getMessage());
+        }
+    }
+
+
+
 
     public void deleteProfileById(long userId) throws Exception {
         try {
