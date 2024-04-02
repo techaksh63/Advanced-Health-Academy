@@ -1,5 +1,6 @@
 package com.user.UserManagement.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -27,13 +28,21 @@ public class User {
         private int totalFamilyMembers;
         @Column(nullable = false)
         private LocalDate date = LocalDate.now();
+        @Column(nullable = false,columnDefinition = "BOOLEAN")
+        private boolean isActive = true;
         @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+        @JsonBackReference
         private List<Profile> profile;
+        @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+//        @JsonBackReference
+        private List<Payment> payment;
+
+
 
         public User() {
         }
 
-        public User(Long userId, String userName, String password, String email, String userMobileNumber, String address, int totalFamilyMembers, LocalDate date, List<Profile> profile) {
+        public User(Long userId, String userName, String password, String email, String userMobileNumber, String address, int totalFamilyMembers, LocalDate date, boolean isActive, List<Profile> profile, List<Payment> payment) {
                 this.userId = userId;
                 this.userName = userName;
                 this.password = password;
@@ -42,8 +51,11 @@ public class User {
                 this.address = address;
                 this.totalFamilyMembers = totalFamilyMembers;
                 this.date = date;
+                this.isActive = isActive;
                 this.profile = profile;
+                this.payment = payment;
         }
+
         public Long getUserId() {
                 return userId;
         }
@@ -115,6 +127,22 @@ public class User {
 
         public void setProfile(List<Profile> profile) {
                 this.profile = profile;
+        }
+
+        public boolean isActive() {
+                return isActive;
+        }
+
+        public void setActive(boolean active) {
+                isActive = active;
+        }
+
+        public List<Payment> getPayment() {
+                return payment;
+        }
+
+        public void setPayment(List<Payment> payment) {
+                this.payment = payment;
         }
 }
 

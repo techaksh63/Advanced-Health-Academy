@@ -1,8 +1,10 @@
 package com.user.UserManagement.Service;
 
 import com.user.UserManagement.DTO.ProfileInfoDTO;
+import com.user.UserManagement.Entity.Payment;
 import com.user.UserManagement.Entity.User;
 import com.user.UserManagement.Entity.Profile;
+import com.user.UserManagement.Repository.PaymentRepository;
 import com.user.UserManagement.Repository.ProfileRepository;
 import com.user.UserManagement.Repository.UserRepository;
 import com.user.UserManagement.Utils.Converter.Entity_To_DTO.ProfileConverter;
@@ -21,7 +23,29 @@ private ProfileConverter profileConverter;
     @Autowired
     private ProfileRepository profileRepository;
     @Autowired
-    UserRepository userRepository;
+    private PaymentService paymentService;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private PaymentRepository paymentRepository;
+
+
+//    public Profile createProfile(Long userId, Profile profile) throws Exception {
+//        try {
+//            Optional<User> optionalUser = userRepository.findById(userId);
+//            if (!optionalUser.isPresent()) {
+//                throw new Exception("User with ID " + userId + " not found");
+//            }
+//            profile.setUser(optionalUser.get());
+//
+//            return profileRepository.save(profile);
+//        } catch (DataAccessException e) {
+//            throw new Exception("Error saving profile: " + e.getMessage());
+//        }
+//    }
+
+
+
 
     public Profile createProfile(Long userId, Profile profile) throws Exception {
         try {
@@ -29,13 +53,43 @@ private ProfileConverter profileConverter;
             if (!optionalUser.isPresent()) {
                 throw new Exception("User with ID " + userId + " not found");
             }
-            profile.setUser(optionalUser.get());
 
-            return profileRepository.save(profile);
+            long existingProfilesCount = profileRepository.countActiveProfilesByUserid(userId,true);
+
+            long additionalProfileCost = 3;
+            long price = 5;
+
+            if (existingProfilesCount == 2) {
+                price = additionalProfileCost * existingProfilesCount;
+            }
+
+            profile.setUser(optionalUser.get());
+            Profile save = profileRepository.save(profile);
+
+            Payment payment = new Payment();
+            payment.setUser(optionalUser.get());
+            payment.setProfile(profile);
+            payment.setAmount(price);
+            payment.setPaymentStatus(false);
+            paymentRepository.save(payment);
+//            paymentService.CreatePayment(payment);
+
+
+
+//            if (price > 0) {
+//                boolean paymentSuccess = paymentService.processPayment(userId, price, "Profile creation fee");
+//                if (!paymentSuccess) {
+//                    throw new Exception("Payment failed for profile creation");
+//                }
+//            }
+
+
+            return save;
         } catch (DataAccessException e) {
             throw new Exception("Error saving profile: " + e.getMessage());
         }
     }
+
 
 //    public List<Profile> getAllProfiles() throws Exception {
 //        try {
@@ -45,20 +99,21 @@ private ProfileConverter profileConverter;
 //        }
 //    }
 
-    public Optional<List<Profile>> getProfileById(long userId) throws Exception {
+    public Optional<Profile> getProfileById(long userId, long profileId) throws Exception {
         try {
-            return Optional.ofNullable(profileRepository.findProfileAllByUserid(userId));
+            System.out.println(profileRepository.countActiveProfilesByUserid(userId, false));
+            return profileRepository.findProfileAllByUserid(userId, profileId);
         } catch (DataAccessException e) {
             throw new Exception("Error finding Profile by ID: " + e.getMessage());
         }
     }
 
-    public Optional<List<ProfileInfoDTO>> getAllProfilesInfo(long userId)throws Exception{
+    public List<ProfileInfoDTO> getAllProfilesInfo(long userId)throws Exception{
         try {
 
-            List<Profile> profile = profileRepository.findProfileAllByUserid(userId);
-            List<Object> profiles = profileRepository.findProfileInfoByUserid(userId);
-            Optional<List<ProfileInfoDTO>> profileInfoDTO = profileConverter.entitiesToProfileInfoDTOs(profile);
+//            List<Profile> profile = profileRepository.findProfileAllByUserid(userId);
+           List<Object> profiles = profileRepository.findProfileInfoByUserid(userId);
+           List<ProfileInfoDTO> profileInfoDTO = profileConverter.convertQueryResultToProfileInfoDTOs(profiles);
 
             return profileInfoDTO;
         } catch (DataAccessException e) {

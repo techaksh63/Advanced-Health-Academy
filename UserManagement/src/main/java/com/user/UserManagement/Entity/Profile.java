@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "Profile")
@@ -19,6 +20,9 @@ public class Profile {
     @JsonBackReference
     @JoinColumn(name = "user_id")
     private User user;
+    @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL)
+//    @JsonBackReference
+    private List<Payment> payment;
     private String fullName;
     private String relationship;
     private String gender;
@@ -31,7 +35,7 @@ public class Profile {
     private String previouslyCuredDiseases;
     private Double height;
     private Double weight;
-
+    private boolean isActive = false;
 
     public Profile() {
     }

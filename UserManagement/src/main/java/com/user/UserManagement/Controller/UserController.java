@@ -1,6 +1,7 @@
 package com.user.UserManagement.Controller;
 
 import com.user.UserManagement.DTO.UserDTO;
+import com.user.UserManagement.DTO.UserInfoDTO;
 import com.user.UserManagement.Entity.Profile;
 import com.user.UserManagement.Entity.User;
 import com.user.UserManagement.Exception.ResourceNotFoundException;
@@ -57,6 +58,21 @@ public class UserController {
             Optional<User> user = userService.getUserById(userId);
             if (user.isPresent()) {
                 return new ResponseEntity<>(user.get(), HttpStatus.OK);
+            } else {
+                throw new UserNotFoundException("User with ID " + userId + " not found");
+            }
+        } catch (UserNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    @GetMapping("/{userId}/info")
+    public ResponseEntity<?> getUserInfoById(@PathVariable long userId) {
+        try {
+            Optional<UserInfoDTO> userInfo = userService.getUserInfoById(userId);
+            if (userInfo.isPresent()) {
+                return new ResponseEntity<>(userInfo.get(), HttpStatus.OK);
             } else {
                 throw new UserNotFoundException("User with ID " + userId + " not found");
             }

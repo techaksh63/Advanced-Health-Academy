@@ -22,6 +22,21 @@ public class ProfileDTO {
     public ProfileDTO(){
     }
 
+    public ProfileDTO(User user, String fullName, String relationship, String gender, LocalDate birthDate, String bloodGroup, String diabetesStatus, String bloodPressureStatus, String currentDisease, String previousSurgeries, String previouslyCuredDiseases, Double height, Double weight) {
+        this.user = user;
+        this.fullName = fullName;
+        this.relationship = relationship;
+        this.gender = gender;
+        this.birthDate = birthDate;
+        this.bloodGroup = bloodGroup;
+        this.diabetesStatus = diabetesStatus;
+        this.bloodPressureStatus = bloodPressureStatus;
+        this.currentDisease = currentDisease;
+        this.previousSurgeries = previousSurgeries;
+        this.previouslyCuredDiseases = previouslyCuredDiseases;
+        this.height = height;
+        this.weight = weight;
+    }
     public ProfileDTO(Long id, User user, String fullName, String relationship, String gender, LocalDate birthDate, String bloodGroup, String diabetesStatus, String bloodPressureStatus, String currentDisease, String previousSurgeries, String previouslyCuredDiseases, Double height, Double weight) {
         this.id = id;
         this.user = user;
