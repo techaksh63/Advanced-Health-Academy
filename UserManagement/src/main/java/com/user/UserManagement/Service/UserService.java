@@ -1,14 +1,18 @@
 package com.user.UserManagement.Service;
 
+import com.user.UserManagement.DTO.UpdateUserInfoDTO;
 import com.user.UserManagement.DTO.UserInfoDTO;
 import com.user.UserManagement.Entity.Profile;
 import com.user.UserManagement.Entity.User;
+import com.user.UserManagement.Exception.ResourceNotFoundException;
+import com.user.UserManagement.Exception.UserNotFoundException;
 import com.user.UserManagement.Repository.ProfileRepository;
 import com.user.UserManagement.Repository.UserRepository;
 import com.user.UserManagement.Utils.Converter.Entity_To_DTO.UserConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -29,26 +33,11 @@ public class UserService {
         try {
             for (Profile profile : user.getProfile()) {
                 profile.setUser(user);
+                profile.setActive(true);
             }
             return userRepository.save(user);
         } catch (DataAccessException e) {
             throw new Exception("Error Registering User: " + e.getMessage());
-        }
-    }
-
-//    public List<User> getAllUsers() throws Exception {
-//        try {
-//            return userRepository.findAll();
-//        } catch (DataAccessException e) {
-//            throw new Exception("Error retrieving all User: " + e.getMessage());
-//        }
-//    }
-
-    public Optional<User> getUserById(long userId) throws Exception {
-        try {
-            return userRepository.findById(userId);
-        } catch (DataAccessException e) {
-            throw new Exception("Error finding User by ID: " + e.getMessage());
         }
     }
 
@@ -64,35 +53,73 @@ public class UserService {
 
     }
 
-    public void deleteUserById(long userId) throws Exception {
+    public String deleteUserById(long userId) throws Exception {
         try {
-            userRepository.deleteById(userId);
+            Optional<User> userOptional = userRepository.findById(userId);
+            if (userOptional.isPresent()){
+                User deactiveUser = userOptional.get();
+                deactiveUser.setActive(false);
+
+                List<Profile> profileOptional = profileRepository.findAll();
+                if (!profileOptional.isEmpty()){
+                    for (Profile profile : deactiveUser.getProfile()) {
+                        profile.setActive(false);
+                    }
+                    userRepository.save(deactiveUser);
+                    return "User Deactivated with all the Profiles";
+                } else {
+                    throw new ResourceNotFoundException("Profiles not found with ID: " + userId);
+                }
+
+
+//                return "User Deactivated";
+            }else {
+                throw new ResourceNotFoundException("User not found with ID: " + userId);
+            }
+
         } catch (DataAccessException e) {
             throw new Exception("Error deleting User: " + e.getMessage());
         }
     }
 
-    public User updateUser(User user) throws ChangeSetPersister.NotFoundException,Exception{
-        if (user == null || user.getUserId() == null){
+
+
+    public UpdateUserInfoDTO updateUser(long userId, UpdateUserInfoDTO updateUserInfoDTO) throws ChangeSetPersister.NotFoundException,Exception{
+        if (updateUserInfoDTO == null){
             throw new ChangeSetPersister.NotFoundException();
         }
-        Optional<User> optionalUser = userRepository.findById(user.getUserId());
+        Optional<User> optionalUser = userRepository.findById(userId);
         if (!optionalUser.isPresent()){
-            throw new ChangeSetPersister.NotFoundException();
+            throw new UserNotFoundException("User with ID " + userId + " not found");
         }
         User updateUser = optionalUser.get();
-        updateUser.setUserName(user.getUserName());
-        updateUser.setPassword(updateUser.getPassword());
-        updateUser.setEmail(updateUser.getEmail());
-        updateUser.setUserMobileNumber(user.getUserMobileNumber());
-        updateUser.setProfile(user.getProfile());
+
+        if (updateUserInfoDTO.getUserName() != null) {
+            updateUser.setUserName(updateUserInfoDTO.getUserName());
+        }
+        if (updateUserInfoDTO.getPassword() != null) {
+            updateUser.setPassword(updateUserInfoDTO.getPassword());
+        }
+        if (updateUserInfoDTO.getEmail() != null) {
+            updateUser.setEmail(updateUserInfoDTO.getEmail());
+        }
+        if (updateUserInfoDTO.getUserMobileNumber() != null) {
+            updateUser.setUserMobileNumber(updateUserInfoDTO.getUserMobileNumber());
+        }
+        if (updateUserInfoDTO.getAddress() != null) {
+            updateUser.setAddress(updateUserInfoDTO.getAddress());
+        }
+        if (updateUserInfoDTO.getTotalFamilyMembers() != null) {
+            updateUser.setTotalFamilyMembers(updateUserInfoDTO.getTotalFamilyMembers());
+        }
+
         try {
-            return userRepository.save(user);
+            User save = userRepository.save(updateUser);
+            return userConverter.UpdateUserInfoConverter(save);
         } catch (DataAccessException e) {
             throw new Exception("Error Updating User: " + e.getMessage());
         }
-
-
     }
+
 
 }

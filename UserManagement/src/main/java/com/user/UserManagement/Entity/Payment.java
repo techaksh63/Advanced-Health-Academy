@@ -1,6 +1,5 @@
 package com.user.UserManagement.Entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -21,22 +20,22 @@ public class Payment {
     @JoinColumn(name = "profile_id")
     private Profile profile;
     private double amount;
-    private boolean paymentStatus = false;
+    private boolean isPaymentSuccess = false;
     public Payment() {
     }
 
-    public Payment(User user, Profile profile, double amount, boolean paymentStatus) {
+    public Payment(User user, Profile profile, double amount, boolean isPaymentSuccess) {
         this.user = user;
         this.profile = profile;
         this.amount = amount;
-        this.paymentStatus = paymentStatus;
+        this.isPaymentSuccess = isPaymentSuccess;
     }
-    public Payment(Long paymentId, User user, Profile profile, double amount, boolean paymentStatus) {
+    public Payment(Long paymentId, User user, Profile profile, double amount, boolean isPaymentSuccess) {
         this.paymentId = paymentId;
         this.user = user;
         this.profile = profile;
         this.amount = amount;
-        this.paymentStatus = paymentStatus;
+        this.isPaymentSuccess = isPaymentSuccess;
     }
 
     public Long getPaymentId() {
@@ -71,11 +70,11 @@ public class Payment {
         this.amount = amount;
     }
 
-    public boolean isPaymentStatus() {
-        return paymentStatus;
+    public boolean isPaymentSuccess() {
+        return isPaymentSuccess;
     }
 
-    public void setPaymentStatus(boolean paymentStatus) {
-        this.paymentStatus = paymentStatus;
+    public void setPaymentSuccess(boolean paymentSuccess) {
+        this.isPaymentSuccess = paymentSuccess;
     }
 }

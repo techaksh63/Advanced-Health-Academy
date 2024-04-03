@@ -11,16 +11,15 @@ import java.util.Optional;
 
 public interface ProfileRepository extends JpaRepository<Profile,Long> {
     @Query(value = "select * from profile where user_id =:userid and id =:profileid",nativeQuery = true)
-    Optional<Profile>findProfileAllByUserid(@Param(value = "userid") long userid, @Param(value = "profileid") long profileid);
-//    @Query(value = "select * from profile where user_id =:userid and is_active=:true",nativeQuery = true)
-//    List<Profile>findActiveProfilesByUserid(@Param(value = "userid") long userid, @Param(value = "profileid") long profileid);
-//    @Query(value = "select count(*) from profile where user_id =:userid and is_active=:true",nativeQuery = true)
-//    Integer countActiveProfilesByUserid(@Param(value = "userid") long userid);
-// After (corrected):
-@Query(value = "select count(*) from profile where user_id =:userid and is_active=:isActive", nativeQuery = true)
-Long countActiveProfilesByUserid(@Param(value = "userid") long userid, @Param("isActive") boolean isActive);
+    Optional<Profile>findProfileAllInfo(@Param(value = "userid") long userid, @Param(value = "profileid") long profileid);
 
-    @Query(value = "select full_name,relationship,gender from profile where user_id =:userid",nativeQuery = true)
+    @Query(value = "select user_id,full_name,relationship,gender,birth_date,blood_group,diabetes_status,blood_pressure_status,current_disease,previous_surgeries,previously_cured_diseases,height,weight,is_active from profile where user_id =:userid and id =:profileid",nativeQuery = true)
+    Optional<Object>findProfileInfoById(@Param(value = "userid") long userid, @Param(value = "profileid") long profileid);
+
+    @Query(value = "select count(*) from profile where user_id =:userid and is_active=:isActive", nativeQuery = true)
+    Long countActiveProfilesByUserid(@Param(value = "userid") long userid, @Param("isActive") boolean isActive);
+
+    @Query(value = "select full_name,relationship,gender,is_active from profile where user_id =:userid",nativeQuery = true)
     List<Object> findProfileInfoByUserid(@Param(value = "userid") long id);
 
 }

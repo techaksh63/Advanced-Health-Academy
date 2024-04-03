@@ -1,12 +1,17 @@
 package com.user.UserManagement.Service;
 
+import com.user.UserManagement.DTO.PaymentDTO;
+import com.user.UserManagement.DTO.ProfileDetailsDTO;
 import com.user.UserManagement.DTO.ProfileInfoDTO;
+import com.user.UserManagement.DTO.UpdateProfileInfoDTO;
 import com.user.UserManagement.Entity.Payment;
 import com.user.UserManagement.Entity.User;
 import com.user.UserManagement.Entity.Profile;
+import com.user.UserManagement.Exception.UserNotFoundException;
 import com.user.UserManagement.Repository.PaymentRepository;
 import com.user.UserManagement.Repository.ProfileRepository;
 import com.user.UserManagement.Repository.UserRepository;
+import com.user.UserManagement.Utils.Converter.Entity_To_DTO.PaymentConverter;
 import com.user.UserManagement.Utils.Converter.Entity_To_DTO.ProfileConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -28,26 +33,11 @@ private ProfileConverter profileConverter;
     private UserRepository userRepository;
     @Autowired
     private PaymentRepository paymentRepository;
+    @Autowired
+    private PaymentConverter paymentConverter;
 
 
-//    public Profile createProfile(Long userId, Profile profile) throws Exception {
-//        try {
-//            Optional<User> optionalUser = userRepository.findById(userId);
-//            if (!optionalUser.isPresent()) {
-//                throw new Exception("User with ID " + userId + " not found");
-//            }
-//            profile.setUser(optionalUser.get());
-//
-//            return profileRepository.save(profile);
-//        } catch (DataAccessException e) {
-//            throw new Exception("Error saving profile: " + e.getMessage());
-//        }
-//    }
-
-
-
-
-    public Profile createProfile(Long userId, Profile profile) throws Exception {
+    public PaymentDTO createProfile(Long userId, Profile profile) throws Exception {
         try {
             Optional<User> optionalUser = userRepository.findById(userId);
             if (!optionalUser.isPresent()) {
@@ -55,12 +45,22 @@ private ProfileConverter profileConverter;
             }
 
             long existingProfilesCount = profileRepository.countActiveProfilesByUserid(userId,true);
+            long pendingPaymentProfileCount = paymentRepository.countPendingPaymentOfProfilesByUserid(userId,false);
 
+            System.out.println(existingProfilesCount);
+            System.out.println(pendingPaymentProfileCount);
+
+            long profileCount = existingProfilesCount+pendingPaymentProfileCount;
             long additionalProfileCost = 3;
             long price = 5;
 
-            if (existingProfilesCount == 2) {
-                price = additionalProfileCost * existingProfilesCount;
+
+            for (int i = 1; i <= profileCount; i++) {
+                if (i == 1) {
+                    price = 5;
+                } else {
+                    price += additionalProfileCost;
+                }
             }
 
             profile.setUser(optionalUser.get());
@@ -70,21 +70,10 @@ private ProfileConverter profileConverter;
             payment.setUser(optionalUser.get());
             payment.setProfile(profile);
             payment.setAmount(price);
-            payment.setPaymentStatus(false);
+            payment.setPaymentSuccess(false);
             paymentRepository.save(payment);
-//            paymentService.CreatePayment(payment);
 
-
-
-//            if (price > 0) {
-//                boolean paymentSuccess = paymentService.processPayment(userId, price, "Profile creation fee");
-//                if (!paymentSuccess) {
-//                    throw new Exception("Payment failed for profile creation");
-//                }
-//            }
-
-
-            return save;
+            return paymentConverter.Entity_to_PaymentDTO(payment);
         } catch (DataAccessException e) {
             throw new Exception("Error saving profile: " + e.getMessage());
         }
@@ -99,10 +88,12 @@ private ProfileConverter profileConverter;
 //        }
 //    }
 
-    public Optional<Profile> getProfileById(long userId, long profileId) throws Exception {
+    public Optional<ProfileDetailsDTO> getProfileById(long userId, long profileId) throws Exception {
         try {
-            System.out.println(profileRepository.countActiveProfilesByUserid(userId, false));
-            return profileRepository.findProfileAllByUserid(userId, profileId);
+            Optional<Object> profileInfoById = profileRepository.findProfileInfoById(userId, profileId);
+            Optional<ProfileDetailsDTO> profileDetailsDTO = profileConverter.convertProfileDetailsToDTO(profileInfoById);
+
+            return profileDetailsDTO;
         } catch (DataAccessException e) {
             throw new Exception("Error finding Profile by ID: " + e.getMessage());
         }
@@ -110,8 +101,6 @@ private ProfileConverter profileConverter;
 
     public List<ProfileInfoDTO> getAllProfilesInfo(long userId)throws Exception{
         try {
-
-//            List<Profile> profile = profileRepository.findProfileAllByUserid(userId);
            List<Object> profiles = profileRepository.findProfileInfoByUserid(userId);
            List<ProfileInfoDTO> profileInfoDTO = profileConverter.convertQueryResultToProfileInfoDTOs(profiles);
 
@@ -122,8 +111,6 @@ private ProfileConverter profileConverter;
     }
 
 
-
-
     public void deleteProfileById(long userId) throws Exception {
         try {
             profileRepository.deleteById(userId);
@@ -132,21 +119,53 @@ private ProfileConverter profileConverter;
         }
     }
 
-    public Profile updateProfile(Profile profile) throws Exception {
-        if (profile == null || profile.getId() == null){
+    public UpdateProfileInfoDTO updateProfile(long userId,long profileId,UpdateProfileInfoDTO updateProfileInfoDTO) throws Exception {
+        if (updateProfileInfoDTO == null){
             throw new ChangeSetPersister.NotFoundException();
         }
-        Optional<Profile> optionalProfile = profileRepository.findById(profile.getId());
+        Optional<Profile> optionalProfile = profileRepository.findProfileAllInfo(userId,profileId);
         if (!optionalProfile.isPresent()){
-            throw new ChangeSetPersister.NotFoundException();
+            throw new UserNotFoundException("Profile with ID " + profileId + " not found");
         }
         Profile updateProfile = optionalProfile.get();
-        updateProfile.setFullName(profile.getFullName());
 
-
+        if (updateProfileInfoDTO.getFullName() != null){
+            updateProfile.setFullName(updateProfileInfoDTO.getFullName());
+        }
+        if(updateProfileInfoDTO.getRelationship() != null){
+            updateProfile.setRelationship(updateProfileInfoDTO.getRelationship());
+        }
+        if (updateProfileInfoDTO.getGender() != null){
+            updateProfile.setGender(updateProfileInfoDTO.getGender());
+        }
+        if(updateProfileInfoDTO.getBirthDate() != null){
+            updateProfile.setBirthDate(updateProfileInfoDTO.getBirthDate());
+        }
+        if(updateProfileInfoDTO.getBloodGroup() != null){
+            updateProfile.setBloodGroup(updateProfileInfoDTO.getBloodGroup());
+        }
+        if(updateProfileInfoDTO.getDiabetesStatus() != null){
+            updateProfile.setDiabetesStatus(updateProfileInfoDTO.getDiabetesStatus());
+        }
+        if(updateProfileInfoDTO.getBloodPressureStatus() != null){
+            updateProfile.setBloodPressureStatus(updateProfileInfoDTO.getBloodPressureStatus());
+        }
+        if(updateProfileInfoDTO.getCurrentDisease() != null){
+            updateProfile.setCurrentDisease(updateProfileInfoDTO.getCurrentDisease());
+        }
+        if(updateProfileInfoDTO.getPreviousSurgeries() != null){
+            updateProfile.setPreviousSurgeries(updateProfileInfoDTO.getPreviousSurgeries());
+        }
+        if(updateProfileInfoDTO.getPreviouslyCuredDiseases() != null){
+            updateProfile.setPreviouslyCuredDiseases(updateProfileInfoDTO.getPreviouslyCuredDiseases());
+        }
+        if(updateProfileInfoDTO.getHeight() != null){
+            updateProfile.setHeight(updateProfileInfoDTO.getHeight());
+        }
 
         try {
-            return profileRepository.save(profile);
+            Profile save = profileRepository.save(updateProfile);
+            return profileConverter.UpdateProfileInfoConverter(save);
         } catch (DataAccessException e) {
             throw new Exception("Error Updating User: " + e.getMessage());
         }

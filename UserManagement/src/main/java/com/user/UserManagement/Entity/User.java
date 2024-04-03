@@ -37,8 +37,6 @@ public class User {
 //        @JsonBackReference
         private List<Payment> payment;
 
-
-
         public User() {
         }
 

@@ -3,6 +3,7 @@ package com.user.UserManagement.Utils.Converter.Entity_To_DTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import com.user.UserManagement.DTO.UpdateUserInfoDTO;
 import com.user.UserManagement.DTO.UserDTO;
 import com.user.UserManagement.DTO.UserInfoDTO;
 import com.user.UserManagement.Entity.User;
@@ -96,6 +97,17 @@ public class UserConverter {
         }
     }
 
+
+    public UpdateUserInfoDTO UpdateUserInfoConverter(User user){
+        UpdateUserInfoDTO updateUserInfoDTO = new UpdateUserInfoDTO();
+        updateUserInfoDTO.setUserName(user.getUserName());
+        updateUserInfoDTO.setPassword(user.getPassword());
+        updateUserInfoDTO.setEmail(user.getEmail());
+        updateUserInfoDTO.setUserMobileNumber(user.getUserMobileNumber());
+        updateUserInfoDTO.setAddress(user.getAddress());
+        updateUserInfoDTO.setTotalFamilyMembers(user.getTotalFamilyMembers());
+        return updateUserInfoDTO;
+    }
 
 }
 

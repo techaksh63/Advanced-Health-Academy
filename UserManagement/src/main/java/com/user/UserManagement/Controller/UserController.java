@@ -1,11 +1,15 @@
 package com.user.UserManagement.Controller;
 
+import com.user.UserManagement.DTO.UpdatePaymentRequestDTO;
+import com.user.UserManagement.DTO.UpdateUserInfoDTO;
 import com.user.UserManagement.DTO.UserDTO;
 import com.user.UserManagement.DTO.UserInfoDTO;
 import com.user.UserManagement.Entity.Profile;
 import com.user.UserManagement.Entity.User;
 import com.user.UserManagement.Exception.ResourceNotFoundException;
 import com.user.UserManagement.Exception.UserNotFoundException;
+import com.user.UserManagement.Repository.UserRepository;
+import com.user.UserManagement.Service.PaymentService;
 import com.user.UserManagement.Service.ProfileService;
 import com.user.UserManagement.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +28,13 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private ProfileService profileService;
+    @Autowired
+    private PaymentService paymentService;
 
     @PostMapping("/register")
     public ResponseEntity<?> createUser(@RequestBody User user) throws Exception {
@@ -38,35 +46,22 @@ public class UserController {
         }
 
     }
-//    @GetMapping
-//    public ResponseEntity<?> getAllUsers() throws Exception {
-//        try {
-//            List<User> users = userService.getAllUsers();
-//            List<Profile> profiles = profileService.getAllProfiles();
-//
-//            List<UserDTO> usersDTO = new ArrayList<>();
-//
-//            return ResponseEntity.ok(usersDTO);
-//        } catch (Exception e) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-//        }
-//    }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<?> getUserById(@PathVariable long userId) {
+    @PutMapping("/payment")
+    public ResponseEntity<?> updatePaymentSuccess(@RequestBody UpdatePaymentRequestDTO request) throws Exception {
         try {
-            Optional<User> user = userService.getUserById(userId);
-            if (user.isPresent()) {
-                return new ResponseEntity<>(user.get(), HttpStatus.OK);
+            boolean success = paymentService.updatePaymentSuccess(request);
+            if (success) {
+                return ResponseEntity.ok("Payment done Successfully");
             } else {
-                throw new UserNotFoundException("User with ID " + userId + " not found");
+                throw new Exception("Payment update failed");
             }
-        } catch (UserNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
+
+
     @GetMapping("/{userId}/info")
     public ResponseEntity<?> getUserInfoById(@PathVariable long userId) {
         try {
@@ -83,13 +78,29 @@ public class UserController {
         }
     }
 
-    @PutMapping("/{userId}")
-    public ResponseEntity<?> updateUser(@PathVariable long userId, @RequestBody User user) {
+//    @GetMapping("/{userId}")
+//    public ResponseEntity<?> getUserById(@PathVariable long userId) {
+//        try {
+//            Optional<User> user = userService.getUserById(userId);
+//            if (user.isPresent()) {
+//                return new ResponseEntity<>(user.get(), HttpStatus.OK);
+//            } else {
+//                throw new UserNotFoundException("User with ID " + userId + " not found");
+//            }
+//        } catch (UserNotFoundException e) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
+
+
+    @PutMapping("/{userId}/update")
+    public ResponseEntity<?> updateUser(@PathVariable long userId, @RequestBody UpdateUserInfoDTO updateUserInfoDTO) {
         try {
-            Optional<User> existingUser = userService.getUserById(userId);
+            Optional<User> existingUser = userRepository.findById(userId);
             if (existingUser.isPresent()) {
-                user.setUserId(userId);
-                User updatedUser = userService.updateUser(user);
+                UpdateUserInfoDTO updatedUser = userService.updateUser(userId,updateUserInfoDTO);
                 return new ResponseEntity<>(updatedUser, HttpStatus.OK);
             } else {
                 throw new UserNotFoundException("User with ID " + userId + " not found");
@@ -103,15 +114,15 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/{userId}")
+    @DeleteMapping("/{userId}/delete")
     public ResponseEntity<?> deleteUserById(@PathVariable long userId) {
         try {
-            Optional<User> userOptional = userService.getUserById(userId);
+            Optional<User> userOptional = userRepository.findById(userId);
             if (userOptional.isPresent()){
-                userService.deleteUserById(userId);
-                return ResponseEntity.ok("Successfully Deleted User");
+              String result =  userService.deleteUserById(userId);
+                return ResponseEntity.ok(result);
             }else {
-                throw new ResourceNotFoundException("To Delete, User not found with ID: " + userId);
+                throw new ResourceNotFoundException("User not found with ID: " + userId);
             }
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

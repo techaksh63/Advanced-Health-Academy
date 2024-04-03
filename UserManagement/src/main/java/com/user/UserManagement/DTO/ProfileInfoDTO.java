@@ -4,13 +4,16 @@ public class ProfileInfoDTO {
     private String fullName;
     private String relationship;
     private String gender;
+    private boolean isActive;
 
     public ProfileInfoDTO() {
     }
-    public ProfileInfoDTO(String fullName, String relationship, String gender) {
+
+    public ProfileInfoDTO(String fullName, String relationship, String gender, boolean isActive) {
         this.fullName = fullName;
         this.relationship = relationship;
         this.gender = gender;
+        this.isActive = isActive;
     }
 
     public String getFullName() {
@@ -35,5 +38,13 @@ public class ProfileInfoDTO {
 
     public void setGender(String gender) {
         this.gender = gender;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
     }
 }

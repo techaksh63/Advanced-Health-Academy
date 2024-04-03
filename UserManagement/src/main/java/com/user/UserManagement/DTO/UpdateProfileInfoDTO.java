@@ -1,28 +1,8 @@
-package com.user.UserManagement.Entity;
-
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import jakarta.persistence.*;
-import lombok.Data;
+package com.user.UserManagement.DTO;
 
 import java.time.LocalDate;
-import java.util.List;
 
-@Entity
-@Table(name = "Profile")
-@Data
-public class Profile {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonBackReference
-    @JoinColumn(name = "user_id")
-    private User user;
-    @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL)
-//    @JsonBackReference
-    private List<Payment> payment;
+public class UpdateProfileInfoDTO {
     private String fullName;
     private String relationship;
     private String gender;
@@ -35,14 +15,10 @@ public class Profile {
     private String previouslyCuredDiseases;
     private Double height;
     private Double weight;
-    private boolean isActive = false;
 
-    public Profile() {
+    public UpdateProfileInfoDTO() {
     }
-
-    public Profile(User user, List<Payment> payment, String fullName, String relationship, String gender, LocalDate birthDate, String bloodGroup, String diabetesStatus, String bloodPressureStatus, String currentDisease, String previousSurgeries, String previouslyCuredDiseases, Double height, Double weight, boolean isActive) {
-        this.user = user;
-        this.payment = payment;
+    public UpdateProfileInfoDTO(String fullName, String relationship, String gender, LocalDate birthDate, String bloodGroup, String diabetesStatus, String bloodPressureStatus, String currentDisease, String previousSurgeries, String previouslyCuredDiseases, Double height, Double weight) {
         this.fullName = fullName;
         this.relationship = relationship;
         this.gender = gender;
@@ -55,50 +31,6 @@ public class Profile {
         this.previouslyCuredDiseases = previouslyCuredDiseases;
         this.height = height;
         this.weight = weight;
-        this.isActive = isActive;
-    }
-
-    public Profile(Long id, User user, List<Payment> payment, String fullName, String relationship, String gender, LocalDate birthDate, String bloodGroup, String diabetesStatus, String bloodPressureStatus, String currentDisease, String previousSurgeries, String previouslyCuredDiseases, Double height, Double weight, boolean isActive) {
-        this.id = id;
-        this.user = user;
-        this.payment = payment;
-        this.fullName = fullName;
-        this.relationship = relationship;
-        this.gender = gender;
-        this.birthDate = birthDate;
-        this.bloodGroup = bloodGroup;
-        this.diabetesStatus = diabetesStatus;
-        this.bloodPressureStatus = bloodPressureStatus;
-        this.currentDisease = currentDisease;
-        this.previousSurgeries = previousSurgeries;
-        this.previouslyCuredDiseases = previouslyCuredDiseases;
-        this.height = height;
-        this.weight = weight;
-        this.isActive = isActive;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public List<Payment> getPayment() {
-        return payment;
-    }
-
-    public void setPayment(List<Payment> payment) {
-        this.payment = payment;
     }
 
     public String getFullName() {
@@ -196,14 +128,4 @@ public class Profile {
     public void setWeight(Double weight) {
         this.weight = weight;
     }
-
-    public boolean isActive() {
-        return isActive;
-    }
-
-    public void setActive(boolean active) {
-        isActive = active;
-    }
 }
-
-

@@ -1,8 +1,12 @@
 package com.user.UserManagement.Controller;
 
+import com.user.UserManagement.DTO.PaymentDTO;
+import com.user.UserManagement.DTO.ProfileDetailsDTO;
 import com.user.UserManagement.DTO.ProfileInfoDTO;
+import com.user.UserManagement.DTO.UpdateProfileInfoDTO;
 import com.user.UserManagement.Entity.Profile;
 import com.user.UserManagement.Exception.UserNotFoundException;
+import com.user.UserManagement.Repository.ProfileRepository;
 import com.user.UserManagement.Service.PaymentService;
 import com.user.UserManagement.Service.ProfileService;
 import com.user.UserManagement.Service.UserService;
@@ -21,28 +25,17 @@ public class ProfileController {
     @Autowired
     private ProfileService profileService;
     @Autowired
+    private ProfileRepository profileRepository;
+    @Autowired
     private UserService userService;
     @Autowired
     private PaymentService paymentService;
 
     @PostMapping("/add")
     public ResponseEntity<?> createProfile(@PathVariable long userId, @RequestBody Profile profile) throws Exception {
-        Profile createdDetails = profileService.createProfile(userId, profile);
-        return new ResponseEntity<>(createdDetails, HttpStatus.CREATED);
+        PaymentDTO pendingPaymentDetails = profileService.createProfile(userId, profile);
+        return new ResponseEntity<>(pendingPaymentDetails, HttpStatus.CREATED);
     }
-
-//    @PostMapping("/add")
-//    public ResponseEntity<?> createProfile(@PathVariable long userId, @RequestBody Profile profile, PaymentService paymentService) throws Exception {
-//        Profile createdDetails = profileService.createProfile(userId, profile, paymentService);
-//        return new ResponseEntity<>(createdDetails, HttpStatus.CREATED);
-//    }
-
-//    @PostMapping("/add")
-//    public ResponseEntity<?> createProfile(@PathVariable long userId, @RequestBody Profile profile) throws Exception {
-//        Profile createdDetails = profileService.createProfile(userId, profile, paymentService);
-//        return new ResponseEntity<>(createdDetails, HttpStatus.CREATED);
-//    }
-
 
     @GetMapping("/all")
     public ResponseEntity<?> getProfilesInfoByUserId(@PathVariable long userId) {
@@ -64,9 +57,9 @@ public class ProfileController {
     @GetMapping("/{profileId}")
     public ResponseEntity<?> getProfilesByUserId(@PathVariable long userId,@PathVariable long profileId) {
         try {
-            Optional<Profile> Profile = profileService.getProfileById(userId, profileId);
-            if (Profile.isPresent()) {
-                return new ResponseEntity<>(Profile.get(), HttpStatus.OK);
+            Optional<ProfileDetailsDTO> profileDetailsDTO = profileService.getProfileById(userId, profileId);
+            if (profileDetailsDTO.isPresent()) {
+                return new ResponseEntity<>(profileDetailsDTO.get(), HttpStatus.OK);
             } else {
                 throw new UserNotFoundException("Profile details for user ID " + userId + " and profile ID " + profileId +" not found");
             }
@@ -78,23 +71,22 @@ public class ProfileController {
     }
 
 
-//    @PutMapping
-//    public ResponseEntity<?> updateProfile(@PathVariable long userId, @RequestBody Profile Profile) {
-//        Profile.setUserId(userId);
-//        try {
-//            Optional<Profile> existingDetails = profileService.getProfileById(userId);
-//            if (existingDetails.isPresent()) {
-//                Profile updatedDetails = profileService.updateProfile(Profile);
-//                return new ResponseEntity<>(updatedDetails, HttpStatus.OK);
-//            } else {
-//                throw new UserNotFoundException("User details for user ID " + userId + " not found");
-//            }
-//        } catch (UserNotFoundException e) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
+    @PutMapping("/{profileId}/update")
+    public ResponseEntity<?> updateProfile(@PathVariable long userId, @PathVariable long profileId, @RequestBody UpdateProfileInfoDTO updateProfileInfoDTO) {
+        try {
+            Optional<Profile> existingDetails = profileRepository.findProfileAllInfo(userId,profileId);
+            if (existingDetails.isPresent()) {
+                UpdateProfileInfoDTO updatedDetails = profileService.updateProfile(userId,profileId,updateProfileInfoDTO);
+                return new ResponseEntity<>(updatedDetails, HttpStatus.OK);
+            } else {
+                throw new UserNotFoundException("User details for user ID " + userId + " not found");
+            }
+        } catch (UserNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @DeleteMapping("")
     public ResponseEntity<?> deleteProfileById(@PathVariable long userId) {
