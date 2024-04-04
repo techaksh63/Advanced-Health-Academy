@@ -7,6 +7,7 @@ import com.user.UserManagement.DTO.UpdateProfileInfoDTO;
 import com.user.UserManagement.Entity.Payment;
 import com.user.UserManagement.Entity.User;
 import com.user.UserManagement.Entity.Profile;
+import com.user.UserManagement.Exception.ResourceNotFoundException;
 import com.user.UserManagement.Exception.UserNotFoundException;
 import com.user.UserManagement.Repository.PaymentRepository;
 import com.user.UserManagement.Repository.ProfileRepository;
@@ -73,35 +74,42 @@ private ProfileConverter profileConverter;
             payment.setPaymentSuccess(false);
             paymentRepository.save(payment);
 
-            return paymentConverter.Entity_to_PaymentDTO(payment);
+            return paymentConverter.EntityToPaymentDTO(payment);
         } catch (DataAccessException e) {
             throw new Exception("Error saving profile: " + e.getMessage());
         }
     }
 
-
-//    public List<Profile> getAllProfiles() throws Exception {
-//        try {
-//            return profileRepository.findAll();
-//        } catch (DataAccessException e) {
-//            throw new Exception("Error retrieving all profile: " + e.getMessage());
-//        }
-//    }
-
-    public Optional<ProfileDetailsDTO> getProfileById(long userId, long profileId) throws Exception {
+    public Optional<ProfileDetailsDTO> getProfileDetailsById(long userId, long profileId) throws Exception {
         try {
-            Optional<Object> profileInfoById = profileRepository.findProfileInfoById(userId, profileId);
-            Optional<ProfileDetailsDTO> profileDetailsDTO = profileConverter.convertProfileDetailsToDTO(profileInfoById);
-
-            return profileDetailsDTO;
+            Optional<Object> profileInfoById = profileRepository.findProfileDetailsById(userId, profileId);
+            if(profileInfoById.isPresent()) {
+                Optional<ProfileDetailsDTO> profileDetailsDTO = profileConverter.convertProfileDetailsToDTO(profileInfoById);
+                return profileDetailsDTO;
+            }else {
+                throw new UserNotFoundException("Profile with " + profileId + " not found");
+            }
         } catch (DataAccessException e) {
             throw new Exception("Error finding Profile by ID: " + e.getMessage());
+        }
+    }
+    public Optional<ProfileDetailsDTO> getActiveProfileDetailsById(long userId, long profileId) throws Exception {
+        try {
+            Optional<Object> profileInfoById = profileRepository.findActiveProfileDetailsById(userId, profileId,true);
+            if(profileInfoById.isPresent()){
+                Optional<ProfileDetailsDTO> profileDetailsDTO = profileConverter.convertProfileDetailsToDTO(profileInfoById);
+                return profileDetailsDTO;
+            }else {
+                throw new UserNotFoundException("Profile with " + profileId + " not Active");
+            }
+        } catch (DataAccessException e) {
+            throw new Exception("Error finding Active Profile by ID: " + e.getMessage());
         }
     }
 
     public List<ProfileInfoDTO> getAllProfilesInfo(long userId)throws Exception{
         try {
-           List<Object> profiles = profileRepository.findProfileInfoByUserid(userId);
+           List<Object> profiles = profileRepository.findAllProfilesInfoByUserid(userId);
            List<ProfileInfoDTO> profileInfoDTO = profileConverter.convertQueryResultToProfileInfoDTOs(profiles);
 
             return profileInfoDTO;
@@ -109,21 +117,39 @@ private ProfileConverter profileConverter;
             throw new Exception("Error retrieving all profiles: " + e.getMessage());
         }
     }
-
-
-    public void deleteProfileById(long userId) throws Exception {
+    public List<ProfileInfoDTO> getAllActiveProfilesInfo(long userId)throws Exception{
         try {
-            profileRepository.deleteById(userId);
+           List<Object> profiles = profileRepository.findAllActiveProfilesInfoByUserid(userId,true);
+           List<ProfileInfoDTO> profileInfoDTO = profileConverter.convertQueryResultToProfileInfoDTOs(profiles);
+
+            return profileInfoDTO;
+        } catch (DataAccessException e) {
+            throw new Exception("Error retrieving all Active profiles: " + e.getMessage());
+        }
+    }
+
+    public String deleteProfileById(long userId, long profileId) throws Exception {
+        try {
+            Optional<Profile> optionalProfile = profileRepository.findActiveProfileAllInfo(userId,profileId,true);
+            if(optionalProfile.isPresent()){
+                Profile profile = optionalProfile.get();
+                profile.setActive(false);
+                profileRepository.save(profile);
+                return "Profile successfully Inactivated with ID" + profileId;
+            }else {
+                throw new ResourceNotFoundException("No Active Profile found with ID: " + profileId);
+            }
         } catch (DataAccessException e) {
             throw new Exception("Error deleting Profile: " + e.getMessage());
         }
     }
 
+
     public UpdateProfileInfoDTO updateProfile(long userId,long profileId,UpdateProfileInfoDTO updateProfileInfoDTO) throws Exception {
         if (updateProfileInfoDTO == null){
             throw new ChangeSetPersister.NotFoundException();
         }
-        Optional<Profile> optionalProfile = profileRepository.findProfileAllInfo(userId,profileId);
+        Optional<Profile> optionalProfile = profileRepository.findActiveProfileAllInfo(userId,profileId,true);
         if (!optionalProfile.isPresent()){
             throw new UserNotFoundException("Profile with ID " + profileId + " not found");
         }

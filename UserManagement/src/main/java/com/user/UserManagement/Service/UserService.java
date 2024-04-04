@@ -58,25 +58,26 @@ public class UserService {
             Optional<User> userOptional = userRepository.findById(userId);
             if (userOptional.isPresent()){
                 User deactiveUser = userOptional.get();
-                deactiveUser.setActive(false);
+                if(deactiveUser.isActive()){
+                    deactiveUser.setActive(false);
 
-                List<Profile> profileOptional = profileRepository.findAll();
-                if (!profileOptional.isEmpty()){
-                    for (Profile profile : deactiveUser.getProfile()) {
-                        profile.setActive(false);
+                    List<Profile> profileOptional = profileRepository.findAll();
+                    if (!profileOptional.isEmpty()){
+                        for (Profile profile : deactiveUser.getProfile()) {
+                            profile.setActive(false);
+                        }
+                        userRepository.save(deactiveUser);
+                        return "User Deactivated with all the Profiles";
+                    } else {
+                        throw new ResourceNotFoundException("Profiles not found with ID: " + userId);
                     }
-                    userRepository.save(deactiveUser);
-                    return "User Deactivated with all the Profiles";
-                } else {
-                    throw new ResourceNotFoundException("Profiles not found with ID: " + userId);
                 }
-
-
-//                return "User Deactivated";
+                else {
+                    throw new ResourceNotFoundException("User already Inactive with ID: " + userId);
+                }
             }else {
                 throw new ResourceNotFoundException("User not found with ID: " + userId);
             }
-
         } catch (DataAccessException e) {
             throw new Exception("Error deleting User: " + e.getMessage());
         }

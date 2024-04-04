@@ -39,45 +39,6 @@ public class UserConverter {
         userInfoDTO.setTotalFamilyMembers(user.getTotalFamilyMembers());
         return userInfoDTO;
     }
-
-//public Optional<UserInfoDTO> entityToInfoDTO(Optional<User> optionalUser) throws Exception {
-//    if (optionalUser.isPresent()) {
-//        User user = optionalUser.get();
-//        UserInfoDTO userInfoDTO = new UserInfoDTO();
-//        userInfoDTO.setUserName(user.getUserName());
-//        userInfoDTO.setEmail(user.getEmail());
-//        userInfoDTO.setUserMobileNumber(user.getUserMobileNumber());
-//        userInfoDTO.setAddress(user.getAddress());
-//        userInfoDTO.setTotalFamilyMembers(user.getTotalFamilyMembers());
-//        return Optional.of(userInfoDTO);
-//    } else {
-//        return Optional.empty();
-//    }
-// }
-
-
-
-
-//    public Optional<List<UserInfoDTO>> convertQueryResultToUserInfoDTOs(List<Object[]> resultList) {
-//        if (resultList == null || resultList.isEmpty()) {
-//            return Optional.empty();
-//        }
-//
-//        List<UserInfoDTO> userInfoDTOs = resultList.stream()
-//                .map(row -> {
-//                    // Assuming row order matches query result
-//                    String userName = (String) row[0];
-//                    String email = (String) row[1];
-//                    String userMobileNumber = (String) row[2];
-//                    String address = (String) row[3];
-//                    int totalFamilyMembers = (Integer) row[4];
-//                    return new UserInfoDTO(userName, email, userMobileNumber, address, totalFamilyMembers);
-//                })
-//                .collect(Collectors.toList());
-//
-//        return Optional.of(userInfoDTOs);
-//    }
-
     public Optional<UserInfoDTO> convertQueryResultToUserInfoDTO(Optional<Object> optionalResult) {
         if (optionalResult.isEmpty()) {
             return Optional.empty();

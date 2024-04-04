@@ -5,6 +5,7 @@ import com.user.UserManagement.DTO.ProfileDetailsDTO;
 import com.user.UserManagement.DTO.ProfileInfoDTO;
 import com.user.UserManagement.DTO.UpdateProfileInfoDTO;
 import com.user.UserManagement.Entity.Profile;
+import com.user.UserManagement.Exception.ResourceNotFoundException;
 import com.user.UserManagement.Exception.UserNotFoundException;
 import com.user.UserManagement.Repository.ProfileRepository;
 import com.user.UserManagement.Service.PaymentService;
@@ -37,15 +38,31 @@ public class ProfileController {
         return new ResponseEntity<>(pendingPaymentDetails, HttpStatus.CREATED);
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<?> getProfilesInfoByUserId(@PathVariable long userId) {
+    @GetMapping("/all-profiles")
+    public ResponseEntity<?> getAllProfilesInfoByUserId(@PathVariable long userId) {
         try {
             List<ProfileInfoDTO> profiles = profileService.getAllProfilesInfo(userId);
             if(!profiles.isEmpty()){
                 return new ResponseEntity<>(profiles, HttpStatus.OK);
             }
             else {
-                throw new UserNotFoundException("Profiles " + userId + " not found");
+                throw new UserNotFoundException("Profiles of " + userId + " not found");
+            }
+        } catch (UserNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    @GetMapping("/all-active-profiles")
+    public ResponseEntity<?> getAllActiveProfilesInfoByUserId(@PathVariable long userId) {
+        try {
+            List<ProfileInfoDTO> profiles = profileService.getAllActiveProfilesInfo(userId);
+            if(!profiles.isEmpty()){
+                return new ResponseEntity<>(profiles, HttpStatus.OK);
+            }
+            else {
+                throw new UserNotFoundException("Active Profiles of " + userId + " not found");
             }
         } catch (UserNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
@@ -54,10 +71,25 @@ public class ProfileController {
         }
     }
 
-    @GetMapping("/{profileId}")
-    public ResponseEntity<?> getProfilesByUserId(@PathVariable long userId,@PathVariable long profileId) {
+    @GetMapping("/{profileId}/details")
+    public ResponseEntity<?> getProfileDetailsBy(@PathVariable long userId,@PathVariable long profileId) {
         try {
-            Optional<ProfileDetailsDTO> profileDetailsDTO = profileService.getProfileById(userId, profileId);
+            Optional<ProfileDetailsDTO> profileDetailsDTO = profileService.getProfileDetailsById(userId, profileId);
+            if (profileDetailsDTO.isPresent()) {
+                return new ResponseEntity<>(profileDetailsDTO.get(), HttpStatus.OK);
+            } else {
+                throw new UserNotFoundException("Profile details for user ID " + userId + " and profile ID " + profileId +" not found");
+            }
+        } catch (UserNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    @GetMapping("/{profileId}/active-profile-details")
+    public ResponseEntity<?> getActiveProfileDetailsBy(@PathVariable long userId,@PathVariable long profileId) {
+        try {
+            Optional<ProfileDetailsDTO> profileDetailsDTO = profileService.getActiveProfileDetailsById(userId, profileId);
             if (profileDetailsDTO.isPresent()) {
                 return new ResponseEntity<>(profileDetailsDTO.get(), HttpStatus.OK);
             } else {
@@ -70,11 +102,10 @@ public class ProfileController {
         }
     }
 
-
     @PutMapping("/{profileId}/update")
     public ResponseEntity<?> updateProfile(@PathVariable long userId, @PathVariable long profileId, @RequestBody UpdateProfileInfoDTO updateProfileInfoDTO) {
         try {
-            Optional<Profile> existingDetails = profileRepository.findProfileAllInfo(userId,profileId);
+            Optional<Profile> existingDetails = profileRepository.findActiveProfileAllInfo(userId,profileId,true);
             if (existingDetails.isPresent()) {
                 UpdateProfileInfoDTO updatedDetails = profileService.updateProfile(userId,profileId,updateProfileInfoDTO);
                 return new ResponseEntity<>(updatedDetails, HttpStatus.OK);
@@ -88,12 +119,19 @@ public class ProfileController {
         }
     }
 
-    @DeleteMapping("")
-    public ResponseEntity<?> deleteProfileById(@PathVariable long userId) {
+    @DeleteMapping("/{profileId}/delete")
+    public ResponseEntity<?> deleteProfileById(@PathVariable long userId, @PathVariable long profileId) {
         try {
-            profileService.deleteProfileById(userId);
-            return ResponseEntity.ok("Successfully Deleted Profile");
-        } catch (Exception e) {
+            Optional<Profile> profileOptional = profileRepository.findActiveProfileAllInfo(userId,profileId,true);
+            if (profileOptional.isPresent()){
+                return ResponseEntity.ok(profileService.deleteProfileById(userId,profileId));
+            }else {
+                throw new ResourceNotFoundException("Active Profile not found with ID: " + profileId);
+            }
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+        catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }

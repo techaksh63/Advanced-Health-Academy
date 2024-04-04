@@ -1,15 +1,19 @@
 package com.user.UserManagement.Service;
 
+import com.user.UserManagement.DTO.PaymentDTO;
 import com.user.UserManagement.DTO.UpdatePaymentRequestDTO;
 import com.user.UserManagement.Entity.Payment;
 import com.user.UserManagement.Entity.Profile;
 import com.user.UserManagement.Entity.User;
 import com.user.UserManagement.Repository.PaymentRepository;
 import com.user.UserManagement.Repository.ProfileRepository;
+import com.user.UserManagement.Repository.UserRepository;
+import com.user.UserManagement.Utils.Converter.Entity_To_DTO.PaymentConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,12 +24,8 @@ public class PaymentService {
 
     @Autowired
     private ProfileRepository profileRepository;
-//    public boolean processPayment(Long userId, int amount, String description) throws Exception {
-//
-//        System.out.println("Simulating payment processing for user " + userId +
-//                ", amount: " + amount + ", description: " + description);
-//        return true;
-//    }
+     @Autowired
+    private PaymentConverter paymentConverter;
 
     public Payment CreatePayment(Payment payment) throws Exception {
         try {
@@ -35,15 +35,15 @@ public class PaymentService {
         }
     }
 
-    public long PendingPaymentProfile(long userId) throws Exception{
+    public List<PaymentDTO> PendingProfilesPayment(long userId) throws Exception{
         try {
-            return paymentRepository.countPendingPaymentOfProfilesByUserid(userId,false);
-
+            List<Object> paymentObject = paymentRepository.AllPendingPaymentOfProfilesByUserid(userId, false);
+            List<PaymentDTO> payment = paymentConverter.PaymentObjectConvertToPaymentDTOs(paymentObject);
+            return payment;
         }catch (DataAccessException e) {
             throw new Exception("Error finding Pending Payment Profiles by ID: " + e.getMessage());
         }
     }
-
 
     public boolean updatePaymentSuccess(UpdatePaymentRequestDTO request) throws Exception {
         Long paymentId = request.getPaymentId();
@@ -59,9 +59,18 @@ public class PaymentService {
 
         Payment payment = optionalPayment.get();
 
+        //Validate payment status
+        if (payment.isPaymentSuccess()){
+            throw new Exception("Payment is already done");
+        }
+
         // Validate user and ownership (optional)
         if (!payment.getUser().getUserId().equals(userId)) {
             throw new Exception("Unauthorized access: Payment does not belong to user");
+        }
+        //Validate user is Active or not
+        if(!payment.getUser().isActive()){
+            throw new Exception("User is not Active so Payment can not be done to active profile");
         }
 
         // Validate profile association (optional)
@@ -82,8 +91,21 @@ public class PaymentService {
             throw new Exception("Payment is done but error Activating Profile ");
         }
         Profile profile = optionalProfile.get();
-        profile.setActive(true);
-        profileRepository.save(profile);
+        if (!profile.isActive()){
+            profile.setActive(true);
+            profileRepository.save(profile);
+        }
+
+//        //Activating User
+//        Optional<User> optionalUser = userRepository.findById(payment.getUser().getUserId());
+//        if (!optionalProfile.isPresent()) {
+//            throw new Exception("Payment is done but error Activating User ");
+//        }
+//        User user = optionalUser.get();
+//        if (!user.isActive()){
+//            user.setActive(true);
+//            userRepository.save(user);
+//        }
 
         return true;
     }

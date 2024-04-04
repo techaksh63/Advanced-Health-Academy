@@ -142,6 +142,7 @@ public class User {
         public void setPayment(List<Payment> payment) {
                 this.payment = payment;
         }
+
 }
 
 

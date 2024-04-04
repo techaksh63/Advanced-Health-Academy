@@ -43,27 +43,6 @@ public class ProfileConverter {
         return Optional.of(profileInfoDTOs);
     }
 
-
-
-//    public Optional<List<ProfileInfoDTO>> convertQueryResultToProfileInfoDTOs(Optional<Object> optionalResult) {
-//        if (optionalResult.isEmpty()) {
-//            return Optional.empty();
-//        }
-//        List<Object[]> resultList = (List<Object[]>) optionalResult.get();
-//        if (resultList == null || resultList.isEmpty()) {
-//            return Optional.empty();
-//        }
-//        List<ProfileInfoDTO> profileInfoDTOs = resultList.stream()
-//                .map(row -> {
-//                    String fullName = (String) row[0];
-//                    String relationship = (String) row[1];
-//                    String gender = (String) row[2];
-//                    return new ProfileInfoDTO(fullName, relationship, gender);
-//                })
-//                .collect(Collectors.toList());
-//        return Optional.of(profileInfoDTOs);
-//    }
-
     public List<ProfileInfoDTO> convertQueryResultToProfileInfoDTOs(List<Object> resultList) {
         if (resultList == null || resultList.isEmpty()) {
             return Collections.emptyList();
