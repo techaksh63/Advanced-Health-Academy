@@ -1,5 +1,6 @@
 package com.ADA.AdvancedHealthAcademy.Controller;
 
+import com.ADA.AdvancedHealthAcademy.DTO.PrescriptionInfoDTO;
 import com.ADA.AdvancedHealthAcademy.Entity.Prescriptions;
 import com.ADA.AdvancedHealthAcademy.Exceptions.ResourceNotFoundException;
 import com.ADA.AdvancedHealthAcademy.Service.PrescriptionsService;
@@ -16,11 +17,19 @@ import java.util.Optional;
 public class PrescriptionController {
     @Autowired
     private PrescriptionsService prescriptionsService;
-
-    @GetMapping
+//    @PostMapping("/post")
+//    public ResponseEntity<?> postPrescription(@RequestBody Prescriptions prescription){
+//        try {
+//            Prescriptions prescriptions = prescriptionsService.savePrescription(prescription);
+//            return ResponseEntity.ok(prescriptions);
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+//        }
+//    }
+    @GetMapping("all")
     public ResponseEntity<?> getAllPrescriptions() {
         try {
-            List<Prescriptions> prescriptions = prescriptionsService.getAllPrescriptions();
+            List<PrescriptionInfoDTO> prescriptions = prescriptionsService.findPrescriptionAndMedicineDataByProfileId();
             return ResponseEntity.ok(prescriptions);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());

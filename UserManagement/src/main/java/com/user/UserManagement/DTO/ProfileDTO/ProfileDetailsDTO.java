@@ -1,8 +1,9 @@
-package com.user.UserManagement.DTO;
+package com.user.UserManagement.DTO.ProfileDTO;
 
 import java.time.LocalDate;
 
-public class UpdateProfileInfoDTO {
+public class ProfileDetailsDTO {
+    private Long userId;
     private String fullName;
     private String relationship;
     private String gender;
@@ -15,10 +16,13 @@ public class UpdateProfileInfoDTO {
     private String previouslyCuredDiseases;
     private Double height;
     private Double weight;
+    private boolean isActive;
 
-    public UpdateProfileInfoDTO() {
+    public ProfileDetailsDTO() {
     }
-    public UpdateProfileInfoDTO(String fullName, String relationship, String gender, LocalDate birthDate, String bloodGroup, String diabetesStatus, String bloodPressureStatus, String currentDisease, String previousSurgeries, String previouslyCuredDiseases, Double height, Double weight) {
+
+    public ProfileDetailsDTO(Long userId, String fullName, String relationship, String gender, LocalDate birthDate, String bloodGroup, String diabetesStatus, String bloodPressureStatus, String currentDisease, String previousSurgeries, String previouslyCuredDiseases, Double height, Double weight, boolean isActive) {
+        this.userId = userId;
         this.fullName = fullName;
         this.relationship = relationship;
         this.gender = gender;
@@ -31,6 +35,15 @@ public class UpdateProfileInfoDTO {
         this.previouslyCuredDiseases = previouslyCuredDiseases;
         this.height = height;
         this.weight = weight;
+        this.isActive = isActive;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public String getFullName() {
@@ -127,5 +140,13 @@ public class UpdateProfileInfoDTO {
 
     public void setWeight(Double weight) {
         this.weight = weight;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
     }
 }

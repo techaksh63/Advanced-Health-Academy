@@ -1,8 +1,8 @@
 package com.user.UserManagement.Utils.Converter.Entity_To_DTO;
 
-import com.user.UserManagement.DTO.ProfileDetailsDTO;
-import com.user.UserManagement.DTO.ProfileInfoDTO;
-import com.user.UserManagement.DTO.UpdateProfileInfoDTO;
+import com.user.UserManagement.DTO.ProfileDTO.ProfileDetailsDTO;
+import com.user.UserManagement.DTO.ProfileDTO.ProfileInfoDTO;
+import com.user.UserManagement.DTO.ProfileDTO.UpdateProfileInfoDTO;
 import com.user.UserManagement.Entity.Profile;
 import org.springframework.stereotype.Component;
 

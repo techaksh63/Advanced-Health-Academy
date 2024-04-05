@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.sql.rowset.serial.SerialBlob;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Blob;
 
@@ -33,7 +34,7 @@ public class PrescriptionsUploadController {
         prescriptionsUploadService.saveImage(image);
         Prescriptions savedPrescription = prescriptionsUploadService.addPrescription(file);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedPrescription);
-        }catch (UploadException e) {
+        }catch (FileNotFoundException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error reading image file: " + e.getMessage());

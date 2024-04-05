@@ -1,4 +1,4 @@
-package com.user.UserManagement.DTO;
+package com.user.UserManagement.DTO.ProfileDTO;
 
 public class ProfileInfoDTO {
     private String fullName;

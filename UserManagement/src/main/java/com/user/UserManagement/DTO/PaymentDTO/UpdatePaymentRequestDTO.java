@@ -1,4 +1,4 @@
-package com.user.UserManagement.DTO;
+package com.user.UserManagement.DTO.PaymentDTO;
 
 public class UpdatePaymentRequestDTO {
     private Long paymentId;

@@ -14,13 +14,18 @@ public class PrescriptionsUpload {
     private Blob image;
 
     private Date date = new Date();
+    private String userId;
+    private String profileId;
 
     public PrescriptionsUpload() {
     }
-    public PrescriptionsUpload(long id, Blob image, Date date) {
+
+    public PrescriptionsUpload(long id, Blob image, Date date, String userId, String profileId) {
         this.id = id;
         this.image = image;
         this.date = date;
+        this.userId = userId;
+        this.profileId = profileId;
     }
 
     public long getId() {
@@ -30,7 +35,6 @@ public class PrescriptionsUpload {
     public void setId(long id) {
         this.id = id;
     }
-
 
     public Blob getImage() {
         return image;
@@ -42,5 +46,25 @@ public class PrescriptionsUpload {
 
     public Date getDate() {
         return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getProfileId() {
+        return profileId;
+    }
+
+    public void setProfileId(String profileId) {
+        this.profileId = profileId;
     }
 }

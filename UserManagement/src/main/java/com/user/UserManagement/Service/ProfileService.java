@@ -1,9 +1,10 @@
 package com.user.UserManagement.Service;
 
-import com.user.UserManagement.DTO.PaymentDTO;
-import com.user.UserManagement.DTO.ProfileDetailsDTO;
-import com.user.UserManagement.DTO.ProfileInfoDTO;
-import com.user.UserManagement.DTO.UpdateProfileInfoDTO;
+import com.user.UserManagement.DTO.PaymentDTO.PaymentDTO;
+import com.user.UserManagement.DTO.PrescriptionDTO.PrescriptionDTO;
+import com.user.UserManagement.DTO.ProfileDTO.ProfileDetailsDTO;
+import com.user.UserManagement.DTO.ProfileDTO.ProfileInfoDTO;
+import com.user.UserManagement.DTO.ProfileDTO.UpdateProfileInfoDTO;
 import com.user.UserManagement.Entity.Payment;
 import com.user.UserManagement.Entity.User;
 import com.user.UserManagement.Entity.Profile;
@@ -18,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Optional;
@@ -36,6 +38,26 @@ private ProfileConverter profileConverter;
     private PaymentRepository paymentRepository;
     @Autowired
     private PaymentConverter paymentConverter;
+    @Autowired
+    private RestTemplate restTemplate;
+
+
+    public PrescriptionDTO getAllPrescriptionInfo(long prescriptionId)throws Exception{
+        try {
+            PrescriptionDTO response = restTemplate.getForObject("http://localhost:8083/api/prescription/{prescriptionId}",PrescriptionDTO.class,prescriptionId);
+            return response;
+        } catch (DataAccessException e) {
+            throw new Exception("Error retrieving all Prescription: " + e.getMessage());
+        }
+    }
+
+
+
+
+
+
+
+
 
 
     public PaymentDTO createProfile(Long userId, Profile profile) throws Exception {

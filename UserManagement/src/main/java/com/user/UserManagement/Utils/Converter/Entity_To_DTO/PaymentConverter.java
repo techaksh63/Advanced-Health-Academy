@@ -1,10 +1,9 @@
 package com.user.UserManagement.Utils.Converter.Entity_To_DTO;
 
-import com.user.UserManagement.DTO.PaymentDTO;
+import com.user.UserManagement.DTO.PaymentDTO.PaymentDTO;
 import com.user.UserManagement.Entity.Payment;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.user.UserManagement.DTO;
+package com.user.UserManagement.DTO.UserDTO;
 
 import com.user.UserManagement.Entity.Profile;
 import jakarta.persistence.CascadeType;

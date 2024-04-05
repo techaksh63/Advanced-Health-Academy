@@ -1,5 +1,7 @@
 package com.ADA.AdvancedHealthAcademy.Service;
 
+import com.ADA.AdvancedHealthAcademy.Converter.EntityToDTO.PrescriptionConverter;
+import com.ADA.AdvancedHealthAcademy.DTO.PrescriptionInfoDTO;
 import com.ADA.AdvancedHealthAcademy.Entity.Prescriptions;
 import com.ADA.AdvancedHealthAcademy.Repository.PrescriptionsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,11 +10,14 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PrescriptionsService {
     @Autowired
     private PrescriptionsRepository repository;
+    @Autowired
+    private PrescriptionConverter prescriptionConverter;
 
     public Prescriptions savePrescription(Prescriptions prescriptions) throws Exception {
         try {
@@ -21,13 +26,23 @@ public class PrescriptionsService {
             throw new Exception("Error saving prescription: " + e.getMessage());
         }
     }
-    public List<Prescriptions> getAllPrescriptions() throws Exception {
-        try {
-            return repository.findAll();
-        } catch (DataAccessException e) {
-            throw new Exception("Error retrieving all prescriptions: " + e.getMessage());
-        }
+//    public List<Prescriptions> getAllPrescriptions() throws Exception {
+//        try {
+//            List<Object[]> results = repository.findPrescriptionAndMedicineDataByProfileId(profileId);
+//            return prescriptionConverter.convertToDTOList(results);
+//            return repository.findAllPrescriptionsWithMedicineByProfileId(2);
+//
+//        } catch (DataAccessException e) {
+//            throw new Exception("Error retrieving all prescriptions: " + e.getMessage());
+//        }
+//    }
+
+    public List<PrescriptionInfoDTO> findPrescriptionAndMedicineDataByProfileId() {
+        List<Object> results = repository.findPrescriptionAndMedicineDataByProfileId(1);
+        List<PrescriptionInfoDTO> prescriptionInfoDTOS = prescriptionConverter.convert(results);
+        return prescriptionInfoDTOS;
     }
+
 
     public Optional<Prescriptions> findPrescriptionById(Long prescriptionId) throws Exception {
         try {

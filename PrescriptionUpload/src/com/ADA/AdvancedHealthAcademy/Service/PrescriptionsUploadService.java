@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 
+import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +34,7 @@ public class PrescriptionsUploadService {
     public PrescriptionsUploadService(PrescriptionsRepository prescriptionsRepository) {
         this.prescriptionsRepository = prescriptionsRepository;
     }
-    public PrescriptionsUpload saveImage(PrescriptionsUpload prescription){
+    public PrescriptionsUpload saveImage(PrescriptionsUpload prescription)throws Exception, FileNotFoundException {
         return prescriptionsUploadRepository.save(prescription);
     }
 

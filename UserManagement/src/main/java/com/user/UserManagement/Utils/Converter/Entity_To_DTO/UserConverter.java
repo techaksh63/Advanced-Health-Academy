@@ -1,17 +1,12 @@
 package com.user.UserManagement.Utils.Converter.Entity_To_DTO;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.user.UserManagement.DTO.UpdateUserInfoDTO;
-import com.user.UserManagement.DTO.UserDTO;
-import com.user.UserManagement.DTO.UserInfoDTO;
+import com.user.UserManagement.DTO.UserDTO.UpdateUserInfoDTO;
+import com.user.UserManagement.DTO.UserDTO.UserDTO;
+import com.user.UserManagement.DTO.UserDTO.UserInfoDTO;
 import com.user.UserManagement.Entity.User;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Component
 public class UserConverter {

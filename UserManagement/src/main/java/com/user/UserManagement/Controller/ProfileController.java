@@ -1,9 +1,10 @@
 package com.user.UserManagement.Controller;
 
-import com.user.UserManagement.DTO.PaymentDTO;
-import com.user.UserManagement.DTO.ProfileDetailsDTO;
-import com.user.UserManagement.DTO.ProfileInfoDTO;
-import com.user.UserManagement.DTO.UpdateProfileInfoDTO;
+import com.user.UserManagement.DTO.PaymentDTO.PaymentDTO;
+import com.user.UserManagement.DTO.PrescriptionDTO.PrescriptionDTO;
+import com.user.UserManagement.DTO.ProfileDTO.ProfileDetailsDTO;
+import com.user.UserManagement.DTO.ProfileDTO.ProfileInfoDTO;
+import com.user.UserManagement.DTO.ProfileDTO.UpdateProfileInfoDTO;
 import com.user.UserManagement.Entity.Profile;
 import com.user.UserManagement.Exception.ResourceNotFoundException;
 import com.user.UserManagement.Exception.UserNotFoundException;
@@ -12,10 +13,11 @@ import com.user.UserManagement.Service.PaymentService;
 import com.user.UserManagement.Service.ProfileService;
 import com.user.UserManagement.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
+import javax.management.ServiceNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,7 +33,60 @@ public class ProfileController {
     private UserService userService;
     @Autowired
     private PaymentService paymentService;
+    @Autowired
+    private RestTemplate restTemplate;
 
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllPrescriptionsFromOtherService(@PathVariable long userId) {
+        try {
+            PrescriptionDTO prescription = profileService.getAllPrescriptionInfo(userId);
+//            if (!prescription.isEmpty()){
+                return new ResponseEntity<>(prescription, HttpStatus.OK);
+//            }else {
+//                throw new ServiceNotFoundException("Prescription of " + profileId + " not found");
+//            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+
+
+//    @PostMapping("/uploading")
+//    public ResponseEntity<?> createPrescription(@RequestParam("image") MultipartFile file) {
+//        RestTemplate restTemplate = new RestTemplate();
+//        String resourceUrl = "http://localhost:8081/api/upload-prescription";
+//        Object createdUser = restTemplate.postForObject(resourceUrl, file, Object.class);
+//        return ResponseEntity.ok(createdUser);
+//    }
+
+
+//@PostMapping("/uploading")
+//public ResponseEntity<?> callFirstMicroservice(@RequestParam("image") MultipartFile file) {
+//    try {
+//        // Convert MultipartFile to byte[]
+//        byte[] fileBytes = file.getBytes();
+//
+//        // Set headers for multipart/form-data
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+//
+//        // Build the request entity with the file bytes and headers
+//        HttpEntity<byte[]> requestEntity = new HttpEntity<>(fileBytes, headers);
+//
+//        // Assuming your first microservice is running on localhost:8081
+//        String firstMicroserviceUrl = "http://localhost:8081/api/upload-prescription";
+//
+//        // Make a call to the first microservice
+//        ResponseEntity<?> responseEntity = restTemplate.postForEntity(firstMicroserviceUrl, requestEntity, ResponseEntity.class);
+//
+//        return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
+//    } catch (IOException e) {
+//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error reading image file: " + e.getMessage());
+//    } catch (Exception e) {
+//        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error calling first microservice: " + e.getMessage());
+//    }
+//}
     @PostMapping("/add")
     public ResponseEntity<?> createProfile(@PathVariable long userId, @RequestBody Profile profile) throws Exception {
         PaymentDTO pendingPaymentDetails = profileService.createProfile(userId, profile);

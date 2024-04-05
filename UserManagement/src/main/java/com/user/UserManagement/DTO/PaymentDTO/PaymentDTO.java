@@ -1,4 +1,4 @@
-package com.user.UserManagement.DTO;
+package com.user.UserManagement.DTO.PaymentDTO;
 
 import com.user.UserManagement.Entity.Profile;
 import com.user.UserManagement.Entity.User;

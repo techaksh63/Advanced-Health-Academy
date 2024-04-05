@@ -1,33 +1,22 @@
-package com.ADA.AdvancedHealthAcademy.Entity;
+package com.ADA.AdvancedHealthAcademy.DTO;
 
-import jakarta.persistence.*;
-import lombok.Data;
-
+import com.ADA.AdvancedHealthAcademy.Entity.Medicine;
 import java.time.LocalDate;
 import java.util.List;
 
-@Entity
-@Table(name = "Prescriptions")
-@Data
-public class Prescriptions {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long prescriptionId;
+public class PrescriptionInfoDTO {
     private String doctorName;
     private String doctorMobileNumber;
     private String patientName;
     private String patientMobileNumber;
     private String diagnosis;
     private LocalDate date ;
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "prescriptionId",referencedColumnName = "prescriptionId")
     private List<Medicine> medicine;
-    private String profileId;
-    public Prescriptions() {
+
+    public PrescriptionInfoDTO() {
     }
 
-    public Prescriptions(long prescriptionId, String doctorName, String doctorMobileNumber, String patientName, String patientMobileNumber, String diagnosis, LocalDate date, List<Medicine> medicine, String profileId) {
-        this.prescriptionId = prescriptionId;
+    public PrescriptionInfoDTO(String doctorName, String doctorMobileNumber, String patientName, String patientMobileNumber, String diagnosis, LocalDate date, List<Medicine> medicine) {
         this.doctorName = doctorName;
         this.doctorMobileNumber = doctorMobileNumber;
         this.patientName = patientName;
@@ -35,15 +24,6 @@ public class Prescriptions {
         this.diagnosis = diagnosis;
         this.date = date;
         this.medicine = medicine;
-        this.profileId = profileId;
-    }
-
-    public long getPrescriptionId() {
-        return prescriptionId;
-    }
-
-    public void setPrescriptionId(long prescriptionId) {
-        this.prescriptionId = prescriptionId;
     }
 
     public String getDoctorName() {
@@ -102,11 +82,4 @@ public class Prescriptions {
         this.medicine = medicine;
     }
 
-    public String getProfileId() {
-        return profileId;
-    }
-
-    public void setProfileId(String profileId) {
-        this.profileId = profileId;
-    }
 }

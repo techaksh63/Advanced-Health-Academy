@@ -1,9 +1,12 @@
-package com.user.UserManagement.DTO;
+package com.user.UserManagement.DTO.ProfileDTO;
+
+import com.user.UserManagement.Entity.User;
 
 import java.time.LocalDate;
 
-public class ProfileDetailsDTO {
-    private Long userId;
+public class ProfileDTO {
+    private Long id;
+    private User user;
     private String fullName;
     private String relationship;
     private String gender;
@@ -16,13 +19,11 @@ public class ProfileDetailsDTO {
     private String previouslyCuredDiseases;
     private Double height;
     private Double weight;
-    private boolean isActive;
-
-    public ProfileDetailsDTO() {
+    public ProfileDTO(){
     }
 
-    public ProfileDetailsDTO(Long userId, String fullName, String relationship, String gender, LocalDate birthDate, String bloodGroup, String diabetesStatus, String bloodPressureStatus, String currentDisease, String previousSurgeries, String previouslyCuredDiseases, Double height, Double weight, boolean isActive) {
-        this.userId = userId;
+    public ProfileDTO(User user, String fullName, String relationship, String gender, LocalDate birthDate, String bloodGroup, String diabetesStatus, String bloodPressureStatus, String currentDisease, String previousSurgeries, String previouslyCuredDiseases, Double height, Double weight) {
+        this.user = user;
         this.fullName = fullName;
         this.relationship = relationship;
         this.gender = gender;
@@ -35,15 +36,38 @@ public class ProfileDetailsDTO {
         this.previouslyCuredDiseases = previouslyCuredDiseases;
         this.height = height;
         this.weight = weight;
-        this.isActive = isActive;
+    }
+    public ProfileDTO(Long id, User user, String fullName, String relationship, String gender, LocalDate birthDate, String bloodGroup, String diabetesStatus, String bloodPressureStatus, String currentDisease, String previousSurgeries, String previouslyCuredDiseases, Double height, Double weight) {
+        this.id = id;
+        this.user = user;
+        this.fullName = fullName;
+        this.relationship = relationship;
+        this.gender = gender;
+        this.birthDate = birthDate;
+        this.bloodGroup = bloodGroup;
+        this.diabetesStatus = diabetesStatus;
+        this.bloodPressureStatus = bloodPressureStatus;
+        this.currentDisease = currentDisease;
+        this.previousSurgeries = previousSurgeries;
+        this.previouslyCuredDiseases = previouslyCuredDiseases;
+        this.height = height;
+        this.weight = weight;
     }
 
-    public Long getUserId() {
-        return userId;
+    public Long getId() {
+        return id;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getFullName() {
@@ -140,13 +164,5 @@ public class ProfileDetailsDTO {
 
     public void setWeight(Double weight) {
         this.weight = weight;
-    }
-
-    public boolean isActive() {
-        return isActive;
-    }
-
-    public void setActive(boolean active) {
-        isActive = active;
     }
 }

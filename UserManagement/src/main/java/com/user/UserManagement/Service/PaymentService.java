@@ -1,13 +1,11 @@
 package com.user.UserManagement.Service;
 
-import com.user.UserManagement.DTO.PaymentDTO;
-import com.user.UserManagement.DTO.UpdatePaymentRequestDTO;
+import com.user.UserManagement.DTO.PaymentDTO.PaymentDTO;
+import com.user.UserManagement.DTO.PaymentDTO.UpdatePaymentRequestDTO;
 import com.user.UserManagement.Entity.Payment;
 import com.user.UserManagement.Entity.Profile;
-import com.user.UserManagement.Entity.User;
 import com.user.UserManagement.Repository.PaymentRepository;
 import com.user.UserManagement.Repository.ProfileRepository;
-import com.user.UserManagement.Repository.UserRepository;
 import com.user.UserManagement.Utils.Converter.Entity_To_DTO.PaymentConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;

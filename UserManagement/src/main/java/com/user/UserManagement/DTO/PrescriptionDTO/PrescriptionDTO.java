@@ -1,33 +1,26 @@
-package com.ADA.AdvancedHealthAcademy.Entity;
+package com.user.UserManagement.DTO.PrescriptionDTO;
 
-import jakarta.persistence.*;
-import lombok.Data;
+import com.user.UserManagement.DTO.MedicineDTO.MedicineDTO;
 
 import java.time.LocalDate;
 import java.util.List;
 
-@Entity
-@Table(name = "Prescriptions")
-@Data
-public class Prescriptions {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long prescriptionId;
+public class PrescriptionDTO {
+    private long id;
     private String doctorName;
     private String doctorMobileNumber;
     private String patientName;
     private String patientMobileNumber;
     private String diagnosis;
     private LocalDate date ;
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "prescriptionId",referencedColumnName = "prescriptionId")
-    private List<Medicine> medicine;
-    private String profileId;
-    public Prescriptions() {
+    private List<MedicineDTO> medicine;
+    private long profileId;
+
+    public PrescriptionDTO() {
     }
 
-    public Prescriptions(long prescriptionId, String doctorName, String doctorMobileNumber, String patientName, String patientMobileNumber, String diagnosis, LocalDate date, List<Medicine> medicine, String profileId) {
-        this.prescriptionId = prescriptionId;
+    public PrescriptionDTO(long id, String doctorName, String doctorMobileNumber, String patientName, String patientMobileNumber, String diagnosis, LocalDate date, List<MedicineDTO> medicine, long profileId) {
+        this.id = id;
         this.doctorName = doctorName;
         this.doctorMobileNumber = doctorMobileNumber;
         this.patientName = patientName;
@@ -38,12 +31,12 @@ public class Prescriptions {
         this.profileId = profileId;
     }
 
-    public long getPrescriptionId() {
-        return prescriptionId;
+    public long getId() {
+        return id;
     }
 
-    public void setPrescriptionId(long prescriptionId) {
-        this.prescriptionId = prescriptionId;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getDoctorName() {
@@ -94,19 +87,19 @@ public class Prescriptions {
         this.date = date;
     }
 
-    public List<Medicine> getMedicine() {
+    public List<MedicineDTO> getMedicine() {
         return medicine;
     }
 
-    public void setMedicine(List<Medicine> medicine) {
+    public void setMedicine(List<MedicineDTO> medicine) {
         this.medicine = medicine;
     }
 
-    public String getProfileId() {
+    public long getProfileId() {
         return profileId;
     }
 
-    public void setProfileId(String profileId) {
+    public void setProfileId(long profileId) {
         this.profileId = profileId;
     }
 }

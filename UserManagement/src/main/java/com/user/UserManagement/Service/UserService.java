@@ -1,7 +1,7 @@
 package com.user.UserManagement.Service;
 
-import com.user.UserManagement.DTO.UpdateUserInfoDTO;
-import com.user.UserManagement.DTO.UserInfoDTO;
+import com.user.UserManagement.DTO.UserDTO.UpdateUserInfoDTO;
+import com.user.UserManagement.DTO.UserDTO.UserInfoDTO;
 import com.user.UserManagement.Entity.Profile;
 import com.user.UserManagement.Entity.User;
 import com.user.UserManagement.Exception.ResourceNotFoundException;
@@ -12,10 +12,8 @@ import com.user.UserManagement.Utils.Converter.Entity_To_DTO.UserConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.crossstore.ChangeSetPersister;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
