@@ -14,7 +14,6 @@ public interface ProfileRepository extends JpaRepository<Profile,Long> {
     @Query(value = "select * from profile where user_id =:userid and id =:profileid and is_active=:isActive",nativeQuery = true)
     Optional<Profile>findActiveProfileAllInfo(@Param(value = "userid") long userid, @Param(value = "profileid") long profileid, @Param("isActive") boolean isActive);
 
-
     @Query(value = "select user_id,full_name,relationship,gender,birth_date,blood_group,diabetes_status,blood_pressure_status,current_disease,previous_surgeries,previously_cured_diseases,height,weight,is_active from profile where user_id =:userid and id =:profileid",nativeQuery = true)
     Optional<Object> findProfileDetailsById(@Param(value = "userid") long userid, @Param(value = "profileid") long profileid);
     @Query(value = "select user_id,full_name,relationship,gender,birth_date,blood_group,diabetes_status,blood_pressure_status,current_disease,previous_surgeries,previously_cured_diseases,height,weight,is_active from profile where user_id =:userid and id =:profileid and is_active=:isActive",nativeQuery = true)

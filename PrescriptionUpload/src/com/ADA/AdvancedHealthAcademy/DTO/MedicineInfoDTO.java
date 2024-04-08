@@ -1,51 +1,24 @@
-package com.ADA.AdvancedHealthAcademy.Entity;
+package com.ADA.AdvancedHealthAcademy.DTO;
 
-import jakarta.persistence.*;
-import lombok.Data;
+public class MedicineInfoDTO {
 
-@Entity
-@Table(name = "Medicine")
-@Data
-public class Medicine {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long medicineId;
     private String medicineName;
     private String medicinePower;
-    @Column(name = "Frequency (MN-AF-EN-NT)")
     private String frequency;
-    @Column(name = "Consume (Af or Bf)")
     private String dosage;
     private String duration;
     private String quantity;
 
-    public Medicine() {
+    public MedicineInfoDTO() {
     }
 
-    public Medicine(String medicineName, String medicinePower, String frequency, String dosage, String duration, String quantity) {
+    public MedicineInfoDTO(String medicineName, String medicinePower, String frequency, String dosage, String duration, String quantity) {
         this.medicineName = medicineName;
         this.medicinePower = medicinePower;
         this.frequency = frequency;
         this.dosage = dosage;
         this.duration = duration;
         this.quantity = quantity;
-    }
-    public Medicine(long medicineId, String medicineName, String medicinePower, String frequency, String dosage, String duration, String quantity) {
-        this.medicineId = medicineId;
-        this.medicineName = medicineName;
-        this.medicinePower = medicinePower;
-        this.frequency = frequency;
-        this.dosage = dosage;
-        this.duration = duration;
-        this.quantity = quantity;
-    }
-
-    public long getMedicineId() {
-        return medicineId;
-    }
-
-    public void setMedicineId(long medicineId) {
-        this.medicineId = medicineId;
     }
 
     public String getMedicineName() {

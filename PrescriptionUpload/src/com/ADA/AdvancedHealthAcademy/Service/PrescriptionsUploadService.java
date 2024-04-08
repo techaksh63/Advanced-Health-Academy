@@ -38,7 +38,7 @@ public class PrescriptionsUploadService {
         return prescriptionsUploadRepository.save(prescription);
     }
 
-    public Prescriptions addPrescription(MultipartFile file) throws Exception {
+    public Prescriptions addPrescription(long profileId,MultipartFile file) throws Exception {
         String text;
         try {
             text = OCR(file);
@@ -53,7 +53,7 @@ public class PrescriptionsUploadService {
             throw new Exception("Error converting text to JSON: " + e.getMessage());
         }
 
-        Prescriptions savedPrescription = savePrescriptionFromJson(String.valueOf(JsonOutput));
+        Prescriptions savedPrescription = savePrescriptionFromJson(profileId,String.valueOf(JsonOutput));
         return savedPrescription;
     }
 
@@ -131,7 +131,7 @@ public class PrescriptionsUploadService {
 
 
 
-    public Prescriptions savePrescriptionFromJson(String jsonData) throws Exception {
+    private Prescriptions savePrescriptionFromJson(long profileId,String jsonData) throws Exception {
         JSONObject jsonObject;
         try {
             jsonObject = new JSONObject(jsonData);
@@ -163,6 +163,7 @@ public class PrescriptionsUploadService {
             medicines.add(medicine);
         }
         prescription.setMedicine(medicines);
+        prescription.setProfileId(profileId);
         Prescriptions savedPrescription;
         try {
             savedPrescription = prescriptionsRepository.save(prescription);

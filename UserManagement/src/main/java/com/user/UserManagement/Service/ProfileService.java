@@ -2,6 +2,7 @@ package com.user.UserManagement.Service;
 
 import com.user.UserManagement.DTO.PaymentDTO.PaymentDTO;
 import com.user.UserManagement.DTO.PrescriptionDTO.PrescriptionDTO;
+import com.user.UserManagement.DTO.PrescriptionDTO.PrescriptionInfoDTO;
 import com.user.UserManagement.DTO.ProfileDTO.ProfileDetailsDTO;
 import com.user.UserManagement.DTO.ProfileDTO.ProfileInfoDTO;
 import com.user.UserManagement.DTO.ProfileDTO.UpdateProfileInfoDTO;
@@ -18,6 +19,8 @@ import com.user.UserManagement.Utils.Converter.Entity_To_DTO.ProfileConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -41,15 +44,35 @@ private ProfileConverter profileConverter;
     @Autowired
     private RestTemplate restTemplate;
 
-
-    public PrescriptionDTO getAllPrescriptionInfo(long prescriptionId)throws Exception{
+    public List<PrescriptionInfoDTO> getAllPrescriptionInfo(long profileId)throws Exception{
         try {
-            PrescriptionDTO response = restTemplate.getForObject("http://localhost:8083/api/prescription/{prescriptionId}",PrescriptionDTO.class,prescriptionId);
+            String url = "http://localhost:8083/api/{profileId}/all-prescriptions";
+            List<PrescriptionInfoDTO> response =  restTemplate.getForObject(url,List.class,profileId);
             return response;
         } catch (DataAccessException e) {
             throw new Exception("Error retrieving all Prescription: " + e.getMessage());
         }
     }
+
+    public PrescriptionInfoDTO getPrescriptionInfoById(long profileId,long prescriptionId)throws Exception{
+        try {
+            String url = "http://localhost:8083/api/{profileId}/prescription/{prescriptionId}";
+            PrescriptionInfoDTO response =  restTemplate.getForObject(url,PrescriptionInfoDTO.class,profileId,prescriptionId);
+            return response;
+        } catch (DataAccessException e) {
+            throw new Exception("Error retrieving Prescription: " + e.getMessage());
+        }
+    }
+    public String deletePrescriptionInfoById(long profileId,long prescriptionId)throws Exception{
+        try {
+            String url = "http://localhost:8083/api/{profileId}/prescription/{prescriptionId}/delete";
+            ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.DELETE, null, String.class, profileId, prescriptionId);
+            return response.getBody();
+        } catch (DataAccessException e) {
+            throw new Exception("Error deleting Prescription: " + e.getMessage());
+        }
+    }
+
 
 
 

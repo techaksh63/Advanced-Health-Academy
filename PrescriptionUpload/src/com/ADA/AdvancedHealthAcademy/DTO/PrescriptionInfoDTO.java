@@ -1,6 +1,5 @@
 package com.ADA.AdvancedHealthAcademy.DTO;
 
-import com.ADA.AdvancedHealthAcademy.Entity.Medicine;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -11,12 +10,12 @@ public class PrescriptionInfoDTO {
     private String patientMobileNumber;
     private String diagnosis;
     private LocalDate date ;
-    private List<Medicine> medicine;
+    private List<MedicineInfoDTO> medicine;
 
     public PrescriptionInfoDTO() {
     }
 
-    public PrescriptionInfoDTO(String doctorName, String doctorMobileNumber, String patientName, String patientMobileNumber, String diagnosis, LocalDate date, List<Medicine> medicine) {
+    public PrescriptionInfoDTO(String doctorName, String doctorMobileNumber, String patientName, String patientMobileNumber, String diagnosis, LocalDate date, List<MedicineInfoDTO> medicine) {
         this.doctorName = doctorName;
         this.doctorMobileNumber = doctorMobileNumber;
         this.patientName = patientName;
@@ -74,12 +73,11 @@ public class PrescriptionInfoDTO {
         this.date = date;
     }
 
-    public List<Medicine> getMedicine() {
+    public List<MedicineInfoDTO> getMedicine() {
         return medicine;
     }
 
-    public void setMedicine(List<Medicine> medicine) {
+    public void setMedicine(List<MedicineInfoDTO> medicine) {
         this.medicine = medicine;
     }
-
 }

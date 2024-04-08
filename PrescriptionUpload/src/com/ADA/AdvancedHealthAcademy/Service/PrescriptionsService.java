@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class PrescriptionsService {
@@ -26,27 +25,24 @@ public class PrescriptionsService {
             throw new Exception("Error saving prescription: " + e.getMessage());
         }
     }
-//    public List<Prescriptions> getAllPrescriptions() throws Exception {
-//        try {
-//            List<Object[]> results = repository.findPrescriptionAndMedicineDataByProfileId(profileId);
-//            return prescriptionConverter.convertToDTOList(results);
-//            return repository.findAllPrescriptionsWithMedicineByProfileId(2);
-//
-//        } catch (DataAccessException e) {
-//            throw new Exception("Error retrieving all prescriptions: " + e.getMessage());
-//        }
-//    }
 
-    public List<PrescriptionInfoDTO> findPrescriptionAndMedicineDataByProfileId() {
-        List<Object> results = repository.findPrescriptionAndMedicineDataByProfileId(1);
-        List<PrescriptionInfoDTO> prescriptionInfoDTOS = prescriptionConverter.convert(results);
+
+    public List<PrescriptionInfoDTO> findAllPrescriptionAndMedicineDataByProfileId(long profileId) throws Exception {
+        try {
+        List<Object[]> results = repository.findAllPrescriptionAndMedicineDataByProfileId(profileId);
+        List<PrescriptionInfoDTO> prescriptionInfoDTOS = prescriptionConverter.convertQueryToPrescriptionInfoDTO(results);
         return prescriptionInfoDTOS;
+        } catch (DataAccessException e) {
+            throw new Exception("Error retrieving all prescriptions by profileId: " + e.getMessage());
+        }
     }
 
 
-    public Optional<Prescriptions> findPrescriptionById(Long prescriptionId) throws Exception {
+    public Optional<PrescriptionInfoDTO> findPrescriptionById(Long profileId,Long prescriptionId) throws Exception {
         try {
-            return repository.findById(prescriptionId);
+            List<Object[]> results = repository.findPrescriptionAndMedicineByProfileIdAndPrescriptionId(profileId,prescriptionId);
+            Optional<PrescriptionInfoDTO> prescriptionInfoDTO = prescriptionConverter.convertPrescriptionAndMedicine(results);
+            return prescriptionInfoDTO;
         } catch (DataAccessException e) {
             throw new Exception("Error finding prescription by ID: " + e.getMessage());
         }

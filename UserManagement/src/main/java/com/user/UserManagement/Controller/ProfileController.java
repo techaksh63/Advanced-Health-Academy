@@ -2,6 +2,7 @@ package com.user.UserManagement.Controller;
 
 import com.user.UserManagement.DTO.PaymentDTO.PaymentDTO;
 import com.user.UserManagement.DTO.PrescriptionDTO.PrescriptionDTO;
+import com.user.UserManagement.DTO.PrescriptionDTO.PrescriptionInfoDTO;
 import com.user.UserManagement.DTO.ProfileDTO.ProfileDetailsDTO;
 import com.user.UserManagement.DTO.ProfileDTO.ProfileInfoDTO;
 import com.user.UserManagement.DTO.ProfileDTO.UpdateProfileInfoDTO;
@@ -36,15 +37,41 @@ public class ProfileController {
     @Autowired
     private RestTemplate restTemplate;
 
-    @GetMapping("/all")
-    public ResponseEntity<?> getAllPrescriptionsFromOtherService(@PathVariable long userId) {
+    @GetMapping("/{profileId}/all-prescriptions")
+    public ResponseEntity<?> getAllPrescriptionsFromPrescriptionService(@PathVariable long profileId) {
         try {
-            PrescriptionDTO prescription = profileService.getAllPrescriptionInfo(userId);
-//            if (!prescription.isEmpty()){
+            List<PrescriptionInfoDTO> prescription = profileService.getAllPrescriptionInfo(profileId);
+            if (!prescription.isEmpty()){
                 return new ResponseEntity<>(prescription, HttpStatus.OK);
-//            }else {
-//                throw new ServiceNotFoundException("Prescription of " + profileId + " not found");
-//            }
+            }else {
+                throw new ServiceNotFoundException("Prescriptions of Profile " + profileId + " not found");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+    @GetMapping("/{profileId}/prescription/{prescriptionId}")
+    public ResponseEntity<?> getPrescriptionByIdFromPrescriptionService(@PathVariable long profileId,@PathVariable Long prescriptionId) {
+        try {
+            PrescriptionInfoDTO prescription = profileService.getPrescriptionInfoById(profileId,prescriptionId);
+            if (!(prescription == null)){
+                return new ResponseEntity<>(prescription, HttpStatus.OK);
+            }else {
+                throw new ServiceNotFoundException("Prescriptions of Profile " + profileId + " not found");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+    @DeleteMapping("/{profileId}/prescription/{prescriptionId}/delete")
+    public ResponseEntity<?> DeletePrescriptionByIdFromPrescriptionService(@PathVariable long profileId,@PathVariable Long prescriptionId) {
+        try {
+            PrescriptionInfoDTO prescription = profileService.getPrescriptionInfoById(profileId,prescriptionId);
+            if (!(prescription == null)){
+                return ResponseEntity.ok(profileService.deletePrescriptionInfoById(profileId,prescriptionId));
+            }else {
+                throw new ServiceNotFoundException("Prescriptions of Profile " + profileId + " not found");
+            }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
@@ -52,41 +79,9 @@ public class ProfileController {
 
 
 
-//    @PostMapping("/uploading")
-//    public ResponseEntity<?> createPrescription(@RequestParam("image") MultipartFile file) {
-//        RestTemplate restTemplate = new RestTemplate();
-//        String resourceUrl = "http://localhost:8081/api/upload-prescription";
-//        Object createdUser = restTemplate.postForObject(resourceUrl, file, Object.class);
-//        return ResponseEntity.ok(createdUser);
-//    }
 
 
-//@PostMapping("/uploading")
-//public ResponseEntity<?> callFirstMicroservice(@RequestParam("image") MultipartFile file) {
-//    try {
-//        // Convert MultipartFile to byte[]
-//        byte[] fileBytes = file.getBytes();
-//
-//        // Set headers for multipart/form-data
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-//
-//        // Build the request entity with the file bytes and headers
-//        HttpEntity<byte[]> requestEntity = new HttpEntity<>(fileBytes, headers);
-//
-//        // Assuming your first microservice is running on localhost:8081
-//        String firstMicroserviceUrl = "http://localhost:8081/api/upload-prescription";
-//
-//        // Make a call to the first microservice
-//        ResponseEntity<?> responseEntity = restTemplate.postForEntity(firstMicroserviceUrl, requestEntity, ResponseEntity.class);
-//
-//        return ResponseEntity.status(responseEntity.getStatusCode()).body(responseEntity.getBody());
-//    } catch (IOException e) {
-//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error reading image file: " + e.getMessage());
-//    } catch (Exception e) {
-//        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error calling first microservice: " + e.getMessage());
-//    }
-//}
+
     @PostMapping("/add")
     public ResponseEntity<?> createProfile(@PathVariable long userId, @RequestBody Profile profile) throws Exception {
         PaymentDTO pendingPaymentDetails = profileService.createProfile(userId, profile);

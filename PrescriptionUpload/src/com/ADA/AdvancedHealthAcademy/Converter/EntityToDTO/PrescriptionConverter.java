@@ -1,76 +1,91 @@
 package com.ADA.AdvancedHealthAcademy.Converter.EntityToDTO;
 
+import com.ADA.AdvancedHealthAcademy.DTO.MedicineInfoDTO;
 import com.ADA.AdvancedHealthAcademy.DTO.PrescriptionInfoDTO;
-import com.ADA.AdvancedHealthAcademy.Entity.Medicine;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+
 @Component
 public class PrescriptionConverter {
-   /* public PrescriptionInfoDTO convertToDTO(Object[] result) {
-        PrescriptionInfoDTO prescriptionDTO = new PrescriptionInfoDTO();
-        prescriptionDTO.setDoctorName((String) result[0]);
-        prescriptionDTO.setDoctorMobileNumber((String) result[1]);
-        prescriptionDTO.setPatientName((String) result[2]);
-        prescriptionDTO.setPatientMobileNumber((String) result[3]);
-        prescriptionDTO.setDiagnosis((String) result[4]);
-        prescriptionDTO.setDate((LocalDate) result[5]);
 
-        // If medicine data is available
-        if (result.length > 6 && result[6] != null) {
-            List<Medicine> medicines = new ArrayList<>();
-            Medicine medicine = new Medicine();
-            medicine.setMedicineName((String) result[6]);
-            medicine.setMedicinePower((String) result[7]);
-            medicine.setFrequency((String) result[8]);
-            medicine.setDosage((String) result[9]);
-            medicine.setDuration((String) result[10]);
-            medicine.setQuantity((String) result[11]);
-            medicines.add(medicine);
-            prescriptionDTO.setMedicine(medicines);
-        }
+    public static List<PrescriptionInfoDTO> convertQueryToPrescriptionInfoDTO(List<Object[]> data) {
+        Map<String, PrescriptionInfoDTO> prescriptionsMap = new HashMap<>();
 
-        return prescriptionDTO;
-    }*/
+        for (Object[] row : data) {
+            String key = createPrescriptionKey(row);
+            PrescriptionInfoDTO dto = prescriptionsMap.get(key);
 
+            if (dto == null) {
+                dto = new PrescriptionInfoDTO();
+                dto.setDoctorName((String) row[0]);
+                dto.setDoctorMobileNumber((String) row[1]);
+                dto.setPatientName((String) row[2]);
+                dto.setPatientMobileNumber((String) row[3]);
+                dto.setDiagnosis((String) row[4]);
+                dto.setDate((LocalDate) row[5]);
 
-
-        public List<PrescriptionInfoDTO> convert(List<Object> resultList) {
-            List<PrescriptionInfoDTO> dtoList = new ArrayList<>();
-            for (Object result : resultList) {
-                Object[] objectArray = (Object[]) result; // Assuming each element is an Object array
-                PrescriptionInfoDTO dto = new PrescriptionInfoDTO(
-                        (String) objectArray[0], // doctorName
-                        (String) objectArray[1], // doctorMobileNumber
-                        (String) objectArray[2], // patientName
-                        (String) objectArray[3], // patientMobileNumber
-                        (String) objectArray[4], // diagnosis
-                        (LocalDate) objectArray[5], // date (assuming LocalDate type)
-                        getMedicineList(objectArray) // extract Medicine list
-                );
-                dtoList.add(dto);
+                dto.setMedicine(new ArrayList<>());
+                prescriptionsMap.put(key, dto);
             }
-            return dtoList;
+
+            String medicineName = (String) row[6];
+            String medicinePower = (String) row[7];
+            String frequency = (String) row[8];
+            String dosage = (String) row[9];
+            String duration = (String) row[10];
+            String quantity = (String) row[11];
+
+            MedicineInfoDTO medicine = new MedicineInfoDTO(medicineName, medicinePower, frequency, dosage, duration, quantity);
+            dto.getMedicine().add(medicine);
         }
 
-        private static List<Medicine> getMedicineList(Object[] objectArray) {
-            List<Medicine> medicineList = new ArrayList<>();
-            // Assuming medicine data starts from index 6 (check your query structure)
-            for (int i = 6; i < objectArray.length; i += 11) { // Assuming each medicine entry has 11 elements
-                Medicine medicine = new Medicine(
-                        (String) objectArray[i], // medicineName
-                        (String) objectArray[i + 1], // medicinePower (might need type conversion)
-                        (String) objectArray[i + 2], // frequency
-                        (String) objectArray[i + 3], // dosage
-                        (String) objectArray[i + 4], // duration (assuming Integer type)
-                        (String) objectArray[i + 5]  // quantity (assuming Integer type)
-                );
-                medicineList.add(medicine);
-            }
-            return medicineList;
+        return new ArrayList<>(prescriptionsMap.values());
+    }
+    private static String createPrescriptionKey(Object[] row) {
+        StringBuilder keyBuilder = new StringBuilder();
+        keyBuilder.append((String) row[0]).append("-").append((String) row[2]).append("-").append((String) row[4]).append("-").append(row[5].toString());
+        return keyBuilder.toString();
+    }
+
+
+
+
+    public static Optional<PrescriptionInfoDTO> convertPrescriptionAndMedicine(List<Object[]> resultList) {
+        if (resultList.isEmpty()) {
+            return Optional.empty();
         }
+
+        Object[] firstRow = resultList.get(0);
+        PrescriptionInfoDTO dto = new PrescriptionInfoDTO(
+                (String) firstRow[0],
+                (String) firstRow[1],
+                (String) firstRow[2],
+                (String) firstRow[3],
+                (String) firstRow[4],
+                (LocalDate) firstRow[5],
+                new ArrayList<>()
+        );
+
+        for (Object[] row : resultList) {
+            MedicineInfoDTO medicineDTO = new MedicineInfoDTO(
+                    (String) row[6],
+                    (String) row[7],
+                    (String) row[8],
+                    (String) row[9],
+                    (String) row[10],
+                    (String) row[11]
+            );
+            dto.getMedicine().add(medicineDTO);
+        }
+
+        return Optional.of(dto);
+    }
+
+
+
+
 
 
 }

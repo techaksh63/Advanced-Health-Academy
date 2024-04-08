@@ -17,22 +17,22 @@ import java.io.IOException;
 import java.sql.Blob;
 
 @RestController
-@RequestMapping("/api/upload-prescription")
+@RequestMapping("/api")
 public class PrescriptionsUploadController {
     @Autowired
     private PrescriptionsUploadService prescriptionsUploadService;
     @Autowired
     private PrescriptionsService prescriptionsService;
 
-    @PostMapping
-    public ResponseEntity<?> uploadPrescription(@RequestParam("image") MultipartFile file) {
+    @PostMapping("/{profileId}/upload-prescription")
+    public ResponseEntity<?> uploadPrescription(@PathVariable Long profileId,@RequestParam("image") MultipartFile file) {
         try {
         byte[] bytes = file.getBytes();
         Blob blob = new SerialBlob(bytes);
         PrescriptionsUpload image = new PrescriptionsUpload();
         image.setImage(blob);
         prescriptionsUploadService.saveImage(image);
-        Prescriptions savedPrescription = prescriptionsUploadService.addPrescription(file);
+        Prescriptions savedPrescription = prescriptionsUploadService.addPrescription(profileId,file);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedPrescription);
         }catch (FileNotFoundException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());

@@ -13,10 +13,12 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/prescription")
+@RequestMapping("/api")
 public class PrescriptionController {
     @Autowired
     private PrescriptionsService prescriptionsService;
+
+
 //    @PostMapping("/post")
 //    public ResponseEntity<?> postPrescription(@RequestBody Prescriptions prescription){
 //        try {
@@ -26,20 +28,22 @@ public class PrescriptionController {
 //            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
 //        }
 //    }
-    @GetMapping("all")
-    public ResponseEntity<?> getAllPrescriptions() {
+
+    @GetMapping("/{profileId}/all-prescriptions")
+    public ResponseEntity<?> getAllPrescriptionsByProfileId(@PathVariable Long profileId) {
         try {
-            List<PrescriptionInfoDTO> prescriptions = prescriptionsService.findPrescriptionAndMedicineDataByProfileId();
+            List<PrescriptionInfoDTO> prescriptions = prescriptionsService.findAllPrescriptionAndMedicineDataByProfileId(profileId);
             return ResponseEntity.ok(prescriptions);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 
-    @GetMapping("/{prescriptionId}")
-    public ResponseEntity<?> findPrescriptionById(@PathVariable Long prescriptionId) {
+
+    @GetMapping("/{profileId}/prescription/{prescriptionId}")
+    public ResponseEntity<?> findPrescriptionById(@PathVariable Long profileId,@PathVariable Long prescriptionId) {
         try {
-            Optional<Prescriptions> prescriptionOptional = prescriptionsService.findPrescriptionById(prescriptionId);
+            Optional<PrescriptionInfoDTO> prescriptionOptional = prescriptionsService.findPrescriptionById(profileId,prescriptionId);
             if (prescriptionOptional.isPresent()) {
                 return ResponseEntity.ok(prescriptionOptional.get());
             } else {
@@ -52,15 +56,15 @@ public class PrescriptionController {
         }
     }
 
-    @DeleteMapping("/{prescriptionId}")
-    public ResponseEntity<?> deletePrescriptionById(@PathVariable Long prescriptionId) {
+    @DeleteMapping("/{profileId}/prescription/{prescriptionId}/delete")
+    public ResponseEntity<?> deletePrescriptionById(@PathVariable Long profileId,@PathVariable Long prescriptionId) {
         try {
-            Optional<Prescriptions> prescriptionOptional = prescriptionsService.findPrescriptionById(prescriptionId);
+            Optional<PrescriptionInfoDTO> prescriptionOptional = prescriptionsService.findPrescriptionById(profileId,prescriptionId);
             if (prescriptionOptional.isPresent()) {
                 prescriptionsService.deletePrescriptionById(prescriptionId);
                 return ResponseEntity.ok("Successfully Deleted");
             } else {
-                throw new ResourceNotFoundException("To Delete, Prescription not found with ID: " + prescriptionId);
+                throw new ResourceNotFoundException("Prescription Does not exist with ID: " + prescriptionId);
             }
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
