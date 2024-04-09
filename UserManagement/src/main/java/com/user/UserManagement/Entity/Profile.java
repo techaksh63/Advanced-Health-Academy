@@ -1,7 +1,5 @@
 package com.user.UserManagement.Entity;
 
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -17,11 +15,9 @@ public class Profile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonBackReference
     @JoinColumn(name = "user_id")
     private User user;
     @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL)
-//    @JsonBackReference
     private List<Payment> payment;
     private String fullName;
     private String relationship;

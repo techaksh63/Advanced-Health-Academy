@@ -68,24 +68,23 @@ public class ProfileConverter {
         }
         Object[] profileInfoArray = (Object[]) optionalProfileInfo.get();
 
-        Long userId = (Long) profileInfoArray[0];
-        String fullName = (String) profileInfoArray[1];
-        String relationship = (String) profileInfoArray[2];
-        String gender = (String) profileInfoArray[3];
-        System.out.println(profileInfoArray[4]);
-        java.sql.Date sqlDate = (Date) profileInfoArray[4];
+//        Long userId = (Long) profileInfoArray[0];
+        String fullName = (String) profileInfoArray[0];
+        String relationship = (String) profileInfoArray[1];
+        String gender = (String) profileInfoArray[2];
+        java.sql.Date sqlDate = (Date) profileInfoArray[3];
         LocalDate birthDate = LocalDate.of(sqlDate.getYear() + 1900, sqlDate.getMonth() + 1, sqlDate.getDate());
-        String bloodGroup = (String) profileInfoArray[5];
-        String diabetesStatus = (String) profileInfoArray[6];
-        String bloodPressureStatus = (String) profileInfoArray[7];
-        String currentDisease = (String) profileInfoArray[8];
-        String previousSurgeries = (String) profileInfoArray[9];
-        String previouslyCuredDiseases = (String) profileInfoArray[10];
-        Double height = (Double) profileInfoArray[11];
-        Double weight = (Double) profileInfoArray[12];
-        boolean isActive = (Boolean) profileInfoArray[13];
+        String bloodGroup = (String) profileInfoArray[4];
+        String diabetesStatus = (String) profileInfoArray[5];
+        String bloodPressureStatus = (String) profileInfoArray[6];
+        String currentDisease = (String) profileInfoArray[7];
+        String previousSurgeries = (String) profileInfoArray[8];
+        String previouslyCuredDiseases = (String) profileInfoArray[9];
+        Double height = (Double) profileInfoArray[10];
+        Double weight = (Double) profileInfoArray[11];
+        boolean isActive = (Boolean) profileInfoArray[12];
 
-        return Optional.of(new ProfileDetailsDTO(userId, fullName, relationship, gender, birthDate, bloodGroup,
+        return Optional.of(new ProfileDetailsDTO(fullName, relationship, gender, birthDate, bloodGroup,
                 diabetesStatus, bloodPressureStatus, currentDisease, previousSurgeries, previouslyCuredDiseases,
                 height, weight, isActive));
     }
@@ -106,6 +105,25 @@ public UpdateProfileInfoDTO UpdateProfileInfoConverter(Profile profile){
         updateProfileInfoDTO.setWeight(profile.getWeight());
         return updateProfileInfoDTO;
 }
+
+    public List<ProfileDetailsDTO> ListOfProfileToListOfProfileDetailsDTO(List<Profile> profiles) {
+        return profiles.stream()
+                .map(profile -> new ProfileDetailsDTO(
+                        profile.getFullName(),
+                        profile.getRelationship(),
+                        profile.getGender(),
+                        profile.getBirthDate(),
+                        profile.getBloodGroup(),
+                        profile.getDiabetesStatus(),
+                        profile.getBloodPressureStatus(),
+                        profile.getCurrentDisease(),
+                        profile.getPreviousSurgeries(),
+                        profile.getPreviouslyCuredDiseases(),
+                        profile.getHeight(),
+                        profile.getWeight(),
+                        profile.isActive()))
+                .collect(Collectors.toList());
+    }
 
 
 

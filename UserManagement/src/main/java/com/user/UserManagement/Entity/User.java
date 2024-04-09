@@ -1,6 +1,5 @@
 package com.user.UserManagement.Entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -31,10 +30,8 @@ public class User {
         @Column(nullable = false,columnDefinition = "BOOLEAN")
         private boolean isActive = true;
         @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-        @JsonBackReference
         private List<Profile> profile;
         @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-//        @JsonBackReference
         private List<Payment> payment;
 
         public User() {

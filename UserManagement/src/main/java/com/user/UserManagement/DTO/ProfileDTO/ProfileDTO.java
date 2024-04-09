@@ -5,8 +5,6 @@ import com.user.UserManagement.Entity.User;
 import java.time.LocalDate;
 
 public class ProfileDTO {
-    private Long id;
-    private User user;
     private String fullName;
     private String relationship;
     private String gender;
@@ -22,8 +20,7 @@ public class ProfileDTO {
     public ProfileDTO(){
     }
 
-    public ProfileDTO(User user, String fullName, String relationship, String gender, LocalDate birthDate, String bloodGroup, String diabetesStatus, String bloodPressureStatus, String currentDisease, String previousSurgeries, String previouslyCuredDiseases, Double height, Double weight) {
-        this.user = user;
+    public ProfileDTO(String fullName, String relationship, String gender, LocalDate birthDate, String bloodGroup, String diabetesStatus, String bloodPressureStatus, String currentDisease, String previousSurgeries, String previouslyCuredDiseases, Double height, Double weight) {
         this.fullName = fullName;
         this.relationship = relationship;
         this.gender = gender;
@@ -36,38 +33,6 @@ public class ProfileDTO {
         this.previouslyCuredDiseases = previouslyCuredDiseases;
         this.height = height;
         this.weight = weight;
-    }
-    public ProfileDTO(Long id, User user, String fullName, String relationship, String gender, LocalDate birthDate, String bloodGroup, String diabetesStatus, String bloodPressureStatus, String currentDisease, String previousSurgeries, String previouslyCuredDiseases, Double height, Double weight) {
-        this.id = id;
-        this.user = user;
-        this.fullName = fullName;
-        this.relationship = relationship;
-        this.gender = gender;
-        this.birthDate = birthDate;
-        this.bloodGroup = bloodGroup;
-        this.diabetesStatus = diabetesStatus;
-        this.bloodPressureStatus = bloodPressureStatus;
-        this.currentDisease = currentDisease;
-        this.previousSurgeries = previousSurgeries;
-        this.previouslyCuredDiseases = previouslyCuredDiseases;
-        this.height = height;
-        this.weight = weight;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public String getFullName() {
@@ -165,4 +130,5 @@ public class ProfileDTO {
     public void setWeight(Double weight) {
         this.weight = weight;
     }
+
 }

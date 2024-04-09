@@ -94,17 +94,6 @@ public class PaymentService {
             profileRepository.save(profile);
         }
 
-//        //Activating User
-//        Optional<User> optionalUser = userRepository.findById(payment.getUser().getUserId());
-//        if (!optionalProfile.isPresent()) {
-//            throw new Exception("Payment is done but error Activating User ");
-//        }
-//        User user = optionalUser.get();
-//        if (!user.isActive()){
-//            user.setActive(true);
-//            userRepository.save(user);
-//        }
-
         return true;
     }
 

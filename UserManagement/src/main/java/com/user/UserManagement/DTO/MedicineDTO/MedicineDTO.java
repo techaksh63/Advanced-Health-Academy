@@ -1,7 +1,5 @@
 package com.user.UserManagement.DTO.MedicineDTO;
 
-import jakarta.persistence.Column;
-
 public class MedicineDTO {
     private long medicineId;
     private String medicineName;

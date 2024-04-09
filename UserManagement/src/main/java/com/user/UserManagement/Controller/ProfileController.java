@@ -1,8 +1,8 @@
 package com.user.UserManagement.Controller;
 
 import com.user.UserManagement.DTO.PaymentDTO.PaymentDTO;
-import com.user.UserManagement.DTO.PrescriptionDTO.PrescriptionDTO;
 import com.user.UserManagement.DTO.PrescriptionDTO.PrescriptionInfoDTO;
+import com.user.UserManagement.DTO.ProfileDTO.ProfileDTO;
 import com.user.UserManagement.DTO.ProfileDTO.ProfileDetailsDTO;
 import com.user.UserManagement.DTO.ProfileDTO.ProfileInfoDTO;
 import com.user.UserManagement.DTO.ProfileDTO.UpdateProfileInfoDTO;
@@ -38,9 +38,9 @@ public class ProfileController {
     private RestTemplate restTemplate;
 
     @GetMapping("/{profileId}/all-prescriptions")
-    public ResponseEntity<?> getAllPrescriptionsFromPrescriptionService(@PathVariable long profileId) {
+    public ResponseEntity<?> getAllPrescriptionsFromPrescriptionService(@PathVariable long userId,@PathVariable long profileId) {
         try {
-            List<PrescriptionInfoDTO> prescription = profileService.getAllPrescriptionInfo(profileId);
+            List<PrescriptionInfoDTO> prescription = profileService.getAllPrescriptionInfo(userId,profileId);
             if (!prescription.isEmpty()){
                 return new ResponseEntity<>(prescription, HttpStatus.OK);
             }else {
@@ -51,9 +51,9 @@ public class ProfileController {
         }
     }
     @GetMapping("/{profileId}/prescription/{prescriptionId}")
-    public ResponseEntity<?> getPrescriptionByIdFromPrescriptionService(@PathVariable long profileId,@PathVariable Long prescriptionId) {
+    public ResponseEntity<?> getPrescriptionByIdFromPrescriptionService(@PathVariable long userId,@PathVariable long profileId,@PathVariable Long prescriptionId) {
         try {
-            PrescriptionInfoDTO prescription = profileService.getPrescriptionInfoById(profileId,prescriptionId);
+            PrescriptionInfoDTO prescription = profileService.getPrescriptionInfoById(userId,profileId,prescriptionId);
             if (!(prescription == null)){
                 return new ResponseEntity<>(prescription, HttpStatus.OK);
             }else {
@@ -64,11 +64,24 @@ public class ProfileController {
         }
     }
     @DeleteMapping("/{profileId}/prescription/{prescriptionId}/delete")
-    public ResponseEntity<?> DeletePrescriptionByIdFromPrescriptionService(@PathVariable long profileId,@PathVariable Long prescriptionId) {
+    public ResponseEntity<?> DeletePrescriptionByIdFromPrescriptionService(@PathVariable long userId,@PathVariable long profileId,@PathVariable Long prescriptionId) {
         try {
-            PrescriptionInfoDTO prescription = profileService.getPrescriptionInfoById(profileId,prescriptionId);
+            PrescriptionInfoDTO prescription = profileService.getPrescriptionInfoById(userId,profileId,prescriptionId);
             if (!(prescription == null)){
-                return ResponseEntity.ok(profileService.deletePrescriptionInfoById(profileId,prescriptionId));
+                return ResponseEntity.ok(profileService.deletePrescriptionById(profileId,prescriptionId));
+            }else {
+                throw new ServiceNotFoundException("Prescriptions of Profile " + profileId + " not found");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+    @DeleteMapping("/{profileId}/prescription/delete")
+    public ResponseEntity<?> DeleteAllPrescriptionByProfileIdFromPrescriptionService(@PathVariable long userId,@PathVariable long profileId) {
+        try {
+            List<PrescriptionInfoDTO> prescription = profileService.getAllPrescriptionInfo(userId,profileId);
+            if (!prescription.isEmpty()){
+                return ResponseEntity.ok(profileService.deleteAllPrescriptionByProfileId(profileId));
             }else {
                 throw new ServiceNotFoundException("Prescriptions of Profile " + profileId + " not found");
             }
@@ -82,10 +95,28 @@ public class ProfileController {
 
 
 
+
+
+
+
+    @PutMapping("/{profileId}/activate")
+    public ResponseEntity<?> profileActivation(@PathVariable long userId,@PathVariable long profileId) throws Exception{
+          try {
+              PaymentDTO paymentDetails = profileService.profileActivate(userId,profileId);
+              return new ResponseEntity<>(paymentDetails, HttpStatus.CREATED);
+          }catch (Exception e) {
+              throw new RuntimeException(e);
+          }
+    }
+
     @PostMapping("/add")
-    public ResponseEntity<?> createProfile(@PathVariable long userId, @RequestBody Profile profile) throws Exception {
-        PaymentDTO pendingPaymentDetails = profileService.createProfile(userId, profile);
-        return new ResponseEntity<>(pendingPaymentDetails, HttpStatus.CREATED);
+    public ResponseEntity<?> createProfile(@PathVariable long userId, @RequestBody ProfileDTO profileDTO) throws Exception {
+        try {
+            PaymentDTO paymentDetails = profileService.createProfile(userId, profileDTO);
+            return new ResponseEntity<>(paymentDetails, HttpStatus.CREATED);
+        }catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @GetMapping("/all-profiles")

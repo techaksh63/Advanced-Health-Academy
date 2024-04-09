@@ -1,13 +1,5 @@
 package com.user.UserManagement.DTO.UserDTO;
 
-import com.user.UserManagement.Entity.Profile;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.OneToMany;
-
-import java.time.LocalDate;
-import java.util.List;
-
 public class UserInfoDTO {
     private String userName;
     private String email;

@@ -1,7 +1,6 @@
 package com.ADA.AdvancedHealthAcademy.Controller;
 
 import com.ADA.AdvancedHealthAcademy.DTO.PrescriptionInfoDTO;
-import com.ADA.AdvancedHealthAcademy.Entity.Prescriptions;
 import com.ADA.AdvancedHealthAcademy.Exceptions.ResourceNotFoundException;
 import com.ADA.AdvancedHealthAcademy.Service.PrescriptionsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,16 +17,6 @@ public class PrescriptionController {
     @Autowired
     private PrescriptionsService prescriptionsService;
 
-
-//    @PostMapping("/post")
-//    public ResponseEntity<?> postPrescription(@RequestBody Prescriptions prescription){
-//        try {
-//            Prescriptions prescriptions = prescriptionsService.savePrescription(prescription);
-//            return ResponseEntity.ok(prescriptions);
-//        } catch (Exception e) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-//        }
-//    }
 
     @GetMapping("/{profileId}/all-prescriptions")
     public ResponseEntity<?> getAllPrescriptionsByProfileId(@PathVariable Long profileId) {
@@ -65,6 +54,22 @@ public class PrescriptionController {
                 return ResponseEntity.ok("Successfully Deleted");
             } else {
                 throw new ResourceNotFoundException("Prescription Does not exist with ID: " + prescriptionId);
+            }
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+    @DeleteMapping("/{profileId}/prescription/delete")
+    public ResponseEntity<?> deleteAllPrescriptionByProfileId(@PathVariable Long profileId) {
+        try {
+            List<PrescriptionInfoDTO> prescriptionOptional = prescriptionsService.findAllPrescriptionAndMedicineDataByProfileId(profileId);
+            if (!prescriptionOptional.isEmpty()) {
+               String result = prescriptionsService.deleteAllPrescriptionByIdProfileId(profileId);
+                return ResponseEntity.ok(result);
+            } else {
+                throw new ResourceNotFoundException("Prescription Does not exist with profile ID: " + profileId);
             }
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

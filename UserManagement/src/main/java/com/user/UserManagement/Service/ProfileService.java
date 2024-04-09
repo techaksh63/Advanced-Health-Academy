@@ -1,8 +1,8 @@
 package com.user.UserManagement.Service;
 
 import com.user.UserManagement.DTO.PaymentDTO.PaymentDTO;
-import com.user.UserManagement.DTO.PrescriptionDTO.PrescriptionDTO;
 import com.user.UserManagement.DTO.PrescriptionDTO.PrescriptionInfoDTO;
+import com.user.UserManagement.DTO.ProfileDTO.ProfileDTO;
 import com.user.UserManagement.DTO.ProfileDTO.ProfileDetailsDTO;
 import com.user.UserManagement.DTO.ProfileDTO.ProfileInfoDTO;
 import com.user.UserManagement.DTO.ProfileDTO.UpdateProfileInfoDTO;
@@ -14,6 +14,7 @@ import com.user.UserManagement.Exception.UserNotFoundException;
 import com.user.UserManagement.Repository.PaymentRepository;
 import com.user.UserManagement.Repository.ProfileRepository;
 import com.user.UserManagement.Repository.UserRepository;
+import com.user.UserManagement.Utils.Converter.DTO_To_Entity.ProfileDTOConverter;
 import com.user.UserManagement.Utils.Converter.Entity_To_DTO.PaymentConverter;
 import com.user.UserManagement.Utils.Converter.Entity_To_DTO.ProfileConverter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,9 +43,11 @@ private ProfileConverter profileConverter;
     @Autowired
     private PaymentConverter paymentConverter;
     @Autowired
+    private ProfileDTOConverter profileDTOConverter;
+    @Autowired
     private RestTemplate restTemplate;
 
-    public List<PrescriptionInfoDTO> getAllPrescriptionInfo(long profileId)throws Exception{
+    public List<PrescriptionInfoDTO> getAllPrescriptionInfo(long userId,long profileId)throws Exception{
         try {
             String url = "http://localhost:8083/api/{profileId}/all-prescriptions";
             List<PrescriptionInfoDTO> response =  restTemplate.getForObject(url,List.class,profileId);
@@ -54,7 +57,7 @@ private ProfileConverter profileConverter;
         }
     }
 
-    public PrescriptionInfoDTO getPrescriptionInfoById(long profileId,long prescriptionId)throws Exception{
+    public PrescriptionInfoDTO getPrescriptionInfoById(long userId,long profileId,long prescriptionId)throws Exception{
         try {
             String url = "http://localhost:8083/api/{profileId}/prescription/{prescriptionId}";
             PrescriptionInfoDTO response =  restTemplate.getForObject(url,PrescriptionInfoDTO.class,profileId,prescriptionId);
@@ -63,13 +66,22 @@ private ProfileConverter profileConverter;
             throw new Exception("Error retrieving Prescription: " + e.getMessage());
         }
     }
-    public String deletePrescriptionInfoById(long profileId,long prescriptionId)throws Exception{
+    public String deletePrescriptionById(long profileId, long prescriptionId)throws Exception{
         try {
             String url = "http://localhost:8083/api/{profileId}/prescription/{prescriptionId}/delete";
             ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.DELETE, null, String.class, profileId, prescriptionId);
             return response.getBody();
         } catch (DataAccessException e) {
             throw new Exception("Error deleting Prescription: " + e.getMessage());
+        }
+    }
+    public String deleteAllPrescriptionByProfileId(long profileId)throws Exception{
+        try {
+            String url = "http://localhost:8083/api/{profileId}/prescription/delete";
+            ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.DELETE, null, String.class, profileId);
+            return response.getBody();
+        } catch (DataAccessException e) {
+            throw new Exception("Error deleting All Prescription by Profile Id: " +profileId+ " "+ e.getMessage());
         }
     }
 
@@ -81,10 +93,9 @@ private ProfileConverter profileConverter;
 
 
 
-
-
-    public PaymentDTO createProfile(Long userId, Profile profile) throws Exception {
+    public PaymentDTO createProfile(Long userId, ProfileDTO profileDTO) throws Exception {
         try {
+            Profile profile = profileDTOConverter.convertDtoToProfile(profileDTO);
             Optional<User> optionalUser = userRepository.findById(userId);
             if (!optionalUser.isPresent()) {
                 throw new Exception("User with ID " + userId + " not found");
@@ -92,9 +103,6 @@ private ProfileConverter profileConverter;
 
             long existingProfilesCount = profileRepository.countActiveProfilesByUserid(userId,true);
             long pendingPaymentProfileCount = paymentRepository.countPendingPaymentOfProfilesByUserid(userId,false);
-
-            System.out.println(existingProfilesCount);
-            System.out.println(pendingPaymentProfileCount);
 
             long profileCount = existingProfilesCount+pendingPaymentProfileCount;
             long additionalProfileCost = 3;
@@ -111,6 +119,52 @@ private ProfileConverter profileConverter;
 
             profile.setUser(optionalUser.get());
             Profile save = profileRepository.save(profile);
+
+            Payment payment = new Payment();
+            payment.setUser(optionalUser.get());
+            payment.setProfile(profile);
+            payment.setAmount(price);
+            payment.setPaymentSuccess(false);
+            paymentRepository.save(payment);
+
+            return paymentConverter.EntityToPaymentDTO(payment);
+        } catch (DataAccessException e) {
+            throw new Exception("Error saving profile: " + e.getMessage());
+        }
+    }
+    public PaymentDTO profileActivate(Long userId, Long profileId) throws Exception {
+        try {
+
+            Optional<User> optionalUser = userRepository.findById(userId);
+            if (!optionalUser.isPresent()) {
+                throw new Exception("User with ID " + userId + " not found");
+            }
+
+            Optional<Profile> optionalProfile = profileRepository.findById(profileId);
+            if (!optionalProfile.isPresent()){
+                throw new Exception("Profile with ID " + profileId + " not found");
+            }
+            Profile profile = optionalProfile.get();
+            if (profile.isActive()){
+                throw new Exception("Profile with ID " + profileId + " already active");
+            }
+
+            long existingProfilesCount = profileRepository.countActiveProfilesByUserid(userId,true);
+            long pendingPaymentProfileCount = paymentRepository.countPendingPaymentOfProfilesByUserid(userId,false);
+
+            long profileCount = existingProfilesCount+pendingPaymentProfileCount;
+            long additionalProfileCost = 3;
+            long price = 5;
+
+
+            for (int i = 1; i <= profileCount; i++) {
+                if (i == 1) {
+                    price = 5;
+                } else {
+                    price += additionalProfileCost;
+                }
+            }
+
 
             Payment payment = new Payment();
             payment.setUser(optionalUser.get());
@@ -179,8 +233,12 @@ private ProfileConverter profileConverter;
             if(optionalProfile.isPresent()){
                 Profile profile = optionalProfile.get();
                 profile.setActive(false);
+                List<PrescriptionInfoDTO> prescription = getAllPrescriptionInfo(userId,profileId);
+                if (!prescription.isEmpty()){
+                    deleteAllPrescriptionByProfileId(profileId);
+                }
                 profileRepository.save(profile);
-                return "Profile successfully Inactivated with ID" + profileId;
+                return "Profile successfully Inactivated with ID " + profileId;
             }else {
                 throw new ResourceNotFoundException("No Active Profile found with ID: " + profileId);
             }

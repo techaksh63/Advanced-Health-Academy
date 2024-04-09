@@ -12,11 +12,9 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long paymentId;
     @ManyToOne(fetch = FetchType.LAZY)
-//    @JsonBackReference
     @JoinColumn(name = "user_id")
     private User user;
     @ManyToOne(fetch = FetchType.LAZY)
-//    @JsonBackReference
     @JoinColumn(name = "profile_id")
     private Profile profile;
     private double amount;

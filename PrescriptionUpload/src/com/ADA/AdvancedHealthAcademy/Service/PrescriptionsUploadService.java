@@ -34,7 +34,8 @@ public class PrescriptionsUploadService {
     public PrescriptionsUploadService(PrescriptionsRepository prescriptionsRepository) {
         this.prescriptionsRepository = prescriptionsRepository;
     }
-    public PrescriptionsUpload saveImage(PrescriptionsUpload prescription)throws Exception, FileNotFoundException {
+    public PrescriptionsUpload saveImage(Long profileId,PrescriptionsUpload prescription)throws Exception, FileNotFoundException {
+        prescription.setProfileId(profileId);
         return prescriptionsUploadRepository.save(prescription);
     }
 

@@ -3,7 +3,9 @@ package com.user.UserManagement.Controller;
 import com.user.UserManagement.DTO.PaymentDTO.PaymentDTO;
 import com.user.UserManagement.DTO.PaymentDTO.UpdatePaymentRequestDTO;
 import com.user.UserManagement.DTO.UserDTO.UpdateUserInfoDTO;
+import com.user.UserManagement.DTO.UserDTO.UserDTO;
 import com.user.UserManagement.DTO.UserDTO.UserInfoDTO;
+import com.user.UserManagement.DTO.UserDTO.UserRegisterDTO;
 import com.user.UserManagement.Entity.User;
 import com.user.UserManagement.Exception.ResourceNotFoundException;
 import com.user.UserManagement.Exception.UserNotFoundException;
@@ -29,9 +31,9 @@ public class UserController {
     @Autowired
     private PaymentService paymentService;
     @PostMapping("/register")
-    public ResponseEntity<?> createUser(@RequestBody User user) throws Exception {
+    public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO) throws Exception {
         try {
-            User createdUser = userService.createUser(user);
+            UserRegisterDTO createdUser = userService.createUser(userDTO);
             return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
         } catch (Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
@@ -105,6 +107,23 @@ public class UserController {
             Optional<User> userOptional = userRepository.findById(userId);
             if (userOptional.isPresent()){
                 return ResponseEntity.ok(userService.deleteUserById(userId));
+            }else {
+                throw new ResourceNotFoundException("User not found with ID: " + userId);
+            }
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+
+    }
+
+    @PutMapping("/{userId}/activate")
+    public ResponseEntity<?> UserActivateById(@PathVariable long userId) {
+        try {
+            Optional<User> userOptional = userRepository.findById(userId);
+            if (userOptional.isPresent()){
+                return ResponseEntity.ok(userService.userActivationById(userId));
             }else {
                 throw new ResourceNotFoundException("User not found with ID: " + userId);
             }

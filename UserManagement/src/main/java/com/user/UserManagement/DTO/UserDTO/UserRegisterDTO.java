@@ -1,26 +1,30 @@
 package com.user.UserManagement.DTO.UserDTO;
 
-import com.user.UserManagement.DTO.ProfileDTO.ProfileDTO;
+import com.user.UserManagement.DTO.ProfileDTO.ProfileDetailsDTO;
 
-public class UserDTO {
+import java.time.LocalDate;
+
+public class UserRegisterDTO {
     private String userName;
-    private String password;
     private String email;
     private String userMobileNumber;
     private String address;
     private Integer totalFamilyMembers;
-    private ProfileDTO profile;
+    private LocalDate date;
+    private boolean isActive ;
+    private ProfileDetailsDTO profile;
 
-    public UserDTO(){
+    public UserRegisterDTO() {
     }
 
-    public UserDTO(String userName, String password, String email, String userMobileNumber, String address, Integer totalFamilyMembers, ProfileDTO profile) {
+    public UserRegisterDTO(String userName, String email, String userMobileNumber, String address, Integer totalFamilyMembers, LocalDate date, boolean isActive, ProfileDetailsDTO profile) {
         this.userName = userName;
-        this.password = password;
         this.email = email;
         this.userMobileNumber = userMobileNumber;
         this.address = address;
         this.totalFamilyMembers = totalFamilyMembers;
+        this.date = date;
+        this.isActive = isActive;
         this.profile = profile;
     }
 
@@ -30,14 +34,6 @@ public class UserDTO {
 
     public void setUserName(String userName) {
         this.userName = userName;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getEmail() {
@@ -72,11 +68,27 @@ public class UserDTO {
         this.totalFamilyMembers = totalFamilyMembers;
     }
 
-    public ProfileDTO getProfile() {
+    public ProfileDetailsDTO getProfile() {
         return profile;
     }
 
-    public void setProfile(ProfileDTO profile) {
+    public void setProfile(ProfileDetailsDTO profile) {
         this.profile = profile;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
     }
 }
