@@ -36,7 +36,18 @@ public class PrescriptionsUploadService {
     }
     public PrescriptionsUpload saveImage(Long profileId,PrescriptionsUpload prescription)throws Exception, FileNotFoundException {
         prescription.setProfileId(profileId);
-        return prescriptionsUploadRepository.save(prescription);
+        Long count = prescriptionsUploadRepository.profileCountById(profileId);
+        if(count==1){
+            boolean is_active = prescriptionsUploadRepository.isActiveProfile(profileId);
+            if(is_active){
+                return prescriptionsUploadRepository.save(prescription);
+            }else {
+                throw new Exception("Profile is Inactive with ID: "+ profileId);
+            }
+        }
+        else {
+            throw new Exception("Profile not found with ID: "+ profileId);
+        }
     }
 
     public Prescriptions addPrescription(long profileId,MultipartFile file) throws Exception {

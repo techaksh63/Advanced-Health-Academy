@@ -53,10 +53,16 @@ public class UserService {
 
     public Optional<UserInfoDTO> getUserInfoById(long userId) throws Exception {
         try {
-            Optional<Object> optionalUser = userRepository.findUserInfoById(userId);
-            Optional<UserInfoDTO> userInfoDTO = Optional.of(new UserInfoDTO());
-            userInfoDTO = userConverter.convertQueryResultToUserInfoDTO(optionalUser);
-            return userInfoDTO;
+             boolean is_active = userRepository.isActiveUser(userId);
+                if (is_active){
+                    Optional<Object> optionalUser = userRepository.findUserInfoById(userId);
+                    Optional<UserInfoDTO> userInfoDTO = Optional.of(new UserInfoDTO());
+                    userInfoDTO = userConverter.convertQueryResultToUserInfoDTO(optionalUser);
+                    return userInfoDTO;
+                }else{
+                    throw new Exception("User is Inactive with ID: "+ userId);
+                }
+
         } catch (DataAccessException e) {
             throw new Exception("Error finding User by ID: " + e.getMessage());
         }
@@ -66,6 +72,10 @@ public class UserService {
     public UpdateUserInfoDTO updateUser(long userId, UpdateUserInfoDTO updateUserInfoDTO) throws ChangeSetPersister.NotFoundException,Exception{
         if (updateUserInfoDTO == null){
             throw new ChangeSetPersister.NotFoundException();
+        }
+        boolean is_active = userRepository.isActiveUser(userId);
+        if(!is_active){
+            throw new Exception("User is Inactive with ID: "+ userId);
         }
         Optional<User> optionalUser = userRepository.findById(userId);
         if (!optionalUser.isPresent()){
@@ -111,12 +121,18 @@ public class UserService {
                     List<Profile> profileOptional = profileRepository.findAll();
                     if (!profileOptional.isEmpty()){
                         for (Profile profile : deactiveUser.getProfile()) {
-                            profile.setActive(false);
-
-                            List<PrescriptionInfoDTO> prescription = profileService.getAllPrescriptionInfo(userId,profile.getId());
-                            if (!prescription.isEmpty()){
-                                profileService.deleteAllPrescriptionByProfileId(profile.getId());
+                            if(profile.isActive()){
+                                profile.setActive(false);
+                               try {
+                                   List<PrescriptionInfoDTO> prescription = profileService.getAllPrescriptionInfo(userId,profile.getId());
+                                   if (!prescription.isEmpty()){
+                                       profileService.deleteAllPrescriptionByProfileId(profile.getId());
+                                   }
+                               }catch (Exception e){
+                                   System.out.println("");
+                               }
                             }
+
 
                         }
                         userRepository.save(deactiveUser);

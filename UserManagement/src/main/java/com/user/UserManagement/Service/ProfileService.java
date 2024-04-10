@@ -1,5 +1,6 @@
 package com.user.UserManagement.Service;
 
+import com.user.UserManagement.Configuration.EnvironmentVariables;
 import com.user.UserManagement.DTO.PaymentDTO.PaymentDTO;
 import com.user.UserManagement.DTO.PrescriptionDTO.PrescriptionInfoDTO;
 import com.user.UserManagement.DTO.ProfileDTO.ProfileDTO;
@@ -46,10 +47,12 @@ private ProfileConverter profileConverter;
     private ProfileDTOConverter profileDTOConverter;
     @Autowired
     private RestTemplate restTemplate;
+    @Autowired
+    private EnvironmentVariables environmentVariables;
 
     public List<PrescriptionInfoDTO> getAllPrescriptionInfo(long userId,long profileId)throws Exception{
         try {
-            String url = "http://localhost:8083/api/{profileId}/all-prescriptions";
+            String url = environmentVariables.getAllPrescriptionInfoById();
             List<PrescriptionInfoDTO> response =  restTemplate.getForObject(url,List.class,profileId);
             return response;
         } catch (DataAccessException e) {
@@ -59,7 +62,7 @@ private ProfileConverter profileConverter;
 
     public PrescriptionInfoDTO getPrescriptionInfoById(long userId,long profileId,long prescriptionId)throws Exception{
         try {
-            String url = "http://localhost:8083/api/{profileId}/prescription/{prescriptionId}";
+            String url = environmentVariables.getPrescriptionInfoById();
             PrescriptionInfoDTO response =  restTemplate.getForObject(url,PrescriptionInfoDTO.class,profileId,prescriptionId);
             return response;
         } catch (DataAccessException e) {
@@ -68,7 +71,7 @@ private ProfileConverter profileConverter;
     }
     public String deletePrescriptionById(long profileId, long prescriptionId)throws Exception{
         try {
-            String url = "http://localhost:8083/api/{profileId}/prescription/{prescriptionId}/delete";
+            String url = environmentVariables.deletePrescriptionById();
             ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.DELETE, null, String.class, profileId, prescriptionId);
             return response.getBody();
         } catch (DataAccessException e) {
@@ -77,7 +80,7 @@ private ProfileConverter profileConverter;
     }
     public String deleteAllPrescriptionByProfileId(long profileId)throws Exception{
         try {
-            String url = "http://localhost:8083/api/{profileId}/prescription/delete";
+            String url = environmentVariables.deleteAllPrescriptionById();
             ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.DELETE, null, String.class, profileId);
             return response.getBody();
         } catch (DataAccessException e) {

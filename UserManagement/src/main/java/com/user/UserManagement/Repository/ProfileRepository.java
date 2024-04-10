@@ -33,4 +33,9 @@ public interface ProfileRepository extends JpaRepository<Profile,Long> {
     @Query(value = "select full_name,relationship,gender,is_active from profile where user_id =:userid and is_active=:isActive",nativeQuery = true)
     List<Object> findAllActiveProfilesInfoByUserid(@Param(value = "userid") long id, @Param("isActive") boolean isActive);
 
+
+    @Query(value = "SELECT count(id) FROM profile WHERE id=:id",nativeQuery = true)
+    Long profileCountById(@Param("id")long id);
+    @Query(value = "SELECT is_active FROM profile WHERE id=:id",nativeQuery = true)
+    boolean isActiveProfile(@Param("id")long id);
 }

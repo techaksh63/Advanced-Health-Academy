@@ -30,6 +30,8 @@ public class UserController {
     private UserRepository userRepository;
     @Autowired
     private PaymentService paymentService;
+
+    //User Registration API
     @PostMapping("/register")
     public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO) throws Exception {
         try {
@@ -40,6 +42,8 @@ public class UserController {
         }
 
     }
+
+    //Payment API to active Profile
     @PostMapping("/payment")
     public ResponseEntity<?> updatePaymentSuccess(@RequestBody UpdatePaymentRequestDTO request) throws Exception {
         try {
@@ -53,8 +57,10 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
+
+    //API to get all the pending profiles payments Details of User
     @GetMapping("/{userId}/pending-profile-payment")
-    public ResponseEntity<?> getPendingProfilesPaymentDetails(@PathVariable long userId) {
+    public ResponseEntity<?> getPendingProfilesPaymentDetails(@PathVariable long userId) throws Exception {
         try {
             List<PaymentDTO> paymentDTOS = paymentService.PendingProfilesPayment(userId);
             if (!paymentDTOS.isEmpty()) {
@@ -65,11 +71,13 @@ public class UserController {
         } catch (UserNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
+
+    //API to get the Information of User
     @GetMapping("/{userId}/info")
-    public ResponseEntity<?> getUserInfoById(@PathVariable long userId) {
+    public ResponseEntity<?> getUserInfoById(@PathVariable long userId) throws Exception{
         try {
             Optional<UserInfoDTO> userInfo = userService.getUserInfoById(userId);
             if (userInfo.isPresent()) {
@@ -80,11 +88,13 @@ public class UserController {
         } catch (UserNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
+
+    //API to Update the Details of the User
     @PutMapping("/{userId}/update")
-    public ResponseEntity<?> updateUser(@PathVariable long userId, @RequestBody UpdateUserInfoDTO updateUserInfoDTO) {
+    public ResponseEntity<?> updateUser(@PathVariable long userId, @RequestBody UpdateUserInfoDTO updateUserInfoDTO) throws Exception {
         try {
             Optional<User> existingUser = userRepository.findById(userId);
             if (existingUser.isPresent()) {
@@ -98,11 +108,13 @@ public class UserController {
         } catch (ChangeSetPersister.NotFoundException e) {
             throw new RuntimeException(e);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
+
+    //API to Deactivate the User with all the active profile with deleting all prescriptions
     @DeleteMapping("/{userId}/delete")
-    public ResponseEntity<?> deleteUserById(@PathVariable long userId) {
+    public ResponseEntity<?> deleteUserById(@PathVariable long userId) throws Exception {
         try {
             Optional<User> userOptional = userRepository.findById(userId);
             if (userOptional.isPresent()){
@@ -118,8 +130,9 @@ public class UserController {
 
     }
 
+    //API to Activate the User with Default Profile
     @PutMapping("/{userId}/activate")
-    public ResponseEntity<?> UserActivateById(@PathVariable long userId) {
+    public ResponseEntity<?> UserActivateById(@PathVariable long userId) throws Exception {
         try {
             Optional<User> userOptional = userRepository.findById(userId);
             if (userOptional.isPresent()){

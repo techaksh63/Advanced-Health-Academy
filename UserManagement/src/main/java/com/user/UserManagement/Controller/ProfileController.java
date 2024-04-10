@@ -37,6 +37,7 @@ public class ProfileController {
     @Autowired
     private RestTemplate restTemplate;
 
+    //API to get all the Prescriptions Details of Profile
     @GetMapping("/{profileId}/all-prescriptions")
     public ResponseEntity<?> getAllPrescriptionsFromPrescriptionService(@PathVariable long userId,@PathVariable long profileId) {
         try {
@@ -50,6 +51,8 @@ public class ProfileController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
+
+    //API to get Prescription Details by ID of Profile
     @GetMapping("/{profileId}/prescription/{prescriptionId}")
     public ResponseEntity<?> getPrescriptionByIdFromPrescriptionService(@PathVariable long userId,@PathVariable long profileId,@PathVariable Long prescriptionId) {
         try {
@@ -63,6 +66,8 @@ public class ProfileController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
+
+    //API to delete Prescription of Profile
     @DeleteMapping("/{profileId}/prescription/{prescriptionId}/delete")
     public ResponseEntity<?> DeletePrescriptionByIdFromPrescriptionService(@PathVariable long userId,@PathVariable long profileId,@PathVariable Long prescriptionId) {
         try {
@@ -76,6 +81,8 @@ public class ProfileController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
+
+    //API to delete all the Prescription of Profile
     @DeleteMapping("/{profileId}/prescription/delete")
     public ResponseEntity<?> DeleteAllPrescriptionByProfileIdFromPrescriptionService(@PathVariable long userId,@PathVariable long profileId) {
         try {
@@ -93,12 +100,7 @@ public class ProfileController {
 
 
 
-
-
-
-
-
-
+    //API to Activate Profile
     @PutMapping("/{profileId}/activate")
     public ResponseEntity<?> profileActivation(@PathVariable long userId,@PathVariable long profileId) throws Exception{
           try {
@@ -109,6 +111,7 @@ public class ProfileController {
           }
     }
 
+    //API to add a new Profile to User
     @PostMapping("/add")
     public ResponseEntity<?> createProfile(@PathVariable long userId, @RequestBody ProfileDTO profileDTO) throws Exception {
         try {
@@ -119,6 +122,7 @@ public class ProfileController {
         }
     }
 
+    //API to get list all Profile Information of User
     @GetMapping("/all-profiles")
     public ResponseEntity<?> getAllProfilesInfoByUserId(@PathVariable long userId) {
         try {
@@ -135,6 +139,8 @@ public class ProfileController {
             throw new RuntimeException(e);
         }
     }
+
+    //API to get list of Active Profile Information of User
     @GetMapping("/all-active-profiles")
     public ResponseEntity<?> getAllActiveProfilesInfoByUserId(@PathVariable long userId) {
         try {
@@ -152,6 +158,7 @@ public class ProfileController {
         }
     }
 
+    //API to get details of Profile of User
     @GetMapping("/{profileId}/details")
     public ResponseEntity<?> getProfileDetailsBy(@PathVariable long userId,@PathVariable long profileId) {
         try {
@@ -167,6 +174,8 @@ public class ProfileController {
             throw new RuntimeException(e);
         }
     }
+
+    //API to get details of Active Profile of User
     @GetMapping("/{profileId}/active-profile-details")
     public ResponseEntity<?> getActiveProfileDetailsBy(@PathVariable long userId,@PathVariable long profileId) {
         try {
@@ -183,6 +192,7 @@ public class ProfileController {
         }
     }
 
+    //API to Update the Profile details of User
     @PutMapping("/{profileId}/update")
     public ResponseEntity<?> updateProfile(@PathVariable long userId, @PathVariable long profileId, @RequestBody UpdateProfileInfoDTO updateProfileInfoDTO) {
         try {
@@ -200,6 +210,7 @@ public class ProfileController {
         }
     }
 
+    //API to Deactivate the Profile with deleting all Prescriptions
     @DeleteMapping("/{profileId}/delete")
     public ResponseEntity<?> deleteProfileById(@PathVariable long userId, @PathVariable long profileId) {
         try {

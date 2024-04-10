@@ -6,6 +6,7 @@ import com.user.UserManagement.Entity.Payment;
 import com.user.UserManagement.Entity.Profile;
 import com.user.UserManagement.Repository.PaymentRepository;
 import com.user.UserManagement.Repository.ProfileRepository;
+import com.user.UserManagement.Repository.UserRepository;
 import com.user.UserManagement.Utils.Converter.Entity_To_DTO.PaymentConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -19,7 +20,8 @@ public class PaymentService {
 
     @Autowired
     private PaymentRepository paymentRepository;
-
+    @Autowired
+    private UserRepository userRepository;
     @Autowired
     private ProfileRepository profileRepository;
      @Autowired
@@ -35,9 +37,14 @@ public class PaymentService {
 
     public List<PaymentDTO> PendingProfilesPayment(long userId) throws Exception{
         try {
-            List<Object> paymentObject = paymentRepository.AllPendingPaymentOfProfilesByUserid(userId, false);
-            List<PaymentDTO> payment = paymentConverter.PaymentObjectConvertToPaymentDTOs(paymentObject);
-            return payment;
+            boolean isActive = userRepository.isActiveUser(userId);
+            if (isActive){
+                List<Object> paymentObject = paymentRepository.AllPendingPaymentOfProfilesByUserid(userId, false);
+                List<PaymentDTO> payment = paymentConverter.PaymentObjectConvertToPaymentDTOs(paymentObject);
+                return payment;
+            }else {
+                throw new Exception("User is Inactive with ID: "+ userId);
+            }
         }catch (DataAccessException e) {
             throw new Exception("Error finding Pending Payment Profiles by ID: " + e.getMessage());
         }
@@ -64,7 +71,7 @@ public class PaymentService {
 
         // Validate user and ownership (optional)
         if (!payment.getUser().getUserId().equals(userId)) {
-            throw new Exception("Unauthorized access: Payment does not belong to user");
+            throw new Exception("Unauthorized access: Payment does not belong to provided user");
         }
         //Validate user is Active or not
         if(!payment.getUser().isActive()){
@@ -76,15 +83,27 @@ public class PaymentService {
             throw new Exception("Payment not associated with provided profile ID");
         }
 
+        Optional<Profile> optionalProfile = profileRepository.findById(payment.getProfile().getId());
+        // Validate profile is present in database
+        if (!optionalProfile.isPresent()) {
+            throw new Exception("Profile not found with provided ID" );
+        }
+
+        //Validate profile is Inactive
+        boolean isActive = profileRepository.isActiveProfile(payment.getProfile().getId());
+        if (isActive){
+            throw new Exception("Profile is already Active with provided ID" );
+
+        }
+
         // Validate payment amount
         if (payment.getAmount() != receivedAmount) {
-            throw new Exception("Payment amount mismatch: Received amount does not match database record");
+            throw new Exception("Payment amount mismatch: Received amount does not match amount you need to pay");
         }
         payment.setPaymentSuccess(true);
         paymentRepository.save(payment);
 
         //Activating Profile
-        Optional<Profile> optionalProfile = profileRepository.findById(payment.getProfile().getId());
         if (!optionalProfile.isPresent()) {
             throw new Exception("Payment is done but error Activating Profile ");
         }

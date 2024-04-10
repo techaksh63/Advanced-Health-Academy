@@ -19,10 +19,14 @@ public class PrescriptionController {
 
 
     @GetMapping("/{profileId}/all-prescriptions")
-    public ResponseEntity<?> getAllPrescriptionsByProfileId(@PathVariable Long profileId) {
+    public ResponseEntity<?> getAllPrescriptionsByProfileId(@PathVariable Long profileId) throws Exception{
         try {
             List<PrescriptionInfoDTO> prescriptions = prescriptionsService.findAllPrescriptionAndMedicineDataByProfileId(profileId);
-            return ResponseEntity.ok(prescriptions);
+            if (!prescriptions.isEmpty()){
+                return ResponseEntity.ok(prescriptions);
+            }else {
+                throw new ResourceNotFoundException("Prescription not found with Profile ID: " + profileId);
+            }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
@@ -30,7 +34,7 @@ public class PrescriptionController {
 
 
     @GetMapping("/{profileId}/prescription/{prescriptionId}")
-    public ResponseEntity<?> findPrescriptionById(@PathVariable Long profileId,@PathVariable Long prescriptionId) {
+    public ResponseEntity<?> findPrescriptionById(@PathVariable Long profileId,@PathVariable Long prescriptionId) throws Exception{
         try {
             Optional<PrescriptionInfoDTO> prescriptionOptional = prescriptionsService.findPrescriptionById(profileId,prescriptionId);
             if (prescriptionOptional.isPresent()) {
@@ -50,7 +54,7 @@ public class PrescriptionController {
         try {
             Optional<PrescriptionInfoDTO> prescriptionOptional = prescriptionsService.findPrescriptionById(profileId,prescriptionId);
             if (prescriptionOptional.isPresent()) {
-                prescriptionsService.deletePrescriptionById(prescriptionId);
+                prescriptionsService.deletePrescriptionById(profileId,prescriptionId);
                 return ResponseEntity.ok("Successfully Deleted");
             } else {
                 throw new ResourceNotFoundException("Prescription Does not exist with ID: " + prescriptionId);

@@ -4,6 +4,7 @@ import com.ADA.AdvancedHealthAcademy.Entity.Prescriptions;
 import com.ADA.AdvancedHealthAcademy.Entity.PrescriptionsUpload;
 import com.ADA.AdvancedHealthAcademy.Service.PrescriptionsService;
 import com.ADA.AdvancedHealthAcademy.Service.PrescriptionsUploadService;
+import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +31,12 @@ public class PrescriptionsUploadController {
         Blob blob = new SerialBlob(bytes);
         PrescriptionsUpload image = new PrescriptionsUpload();
         image.setImage(blob);
-        prescriptionsUploadService.saveImage(profileId,image);
+        try {
+            prescriptionsUploadService.saveImage(profileId,image);
+        }catch (Exception e) {
+            throw new Exception("Error saving Image: " + e.getMessage());
+        }
+
         Prescriptions savedPrescription = prescriptionsUploadService.addPrescription(profileId,file);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedPrescription);
         }catch (FileNotFoundException e) {
