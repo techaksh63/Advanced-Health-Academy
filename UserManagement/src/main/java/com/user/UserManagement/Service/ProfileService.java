@@ -144,12 +144,20 @@ private ProfileConverter profileConverter;
             }
 
             Optional<Profile> optionalProfile = profileRepository.findById(profileId);
-            if (!optionalProfile.isPresent()){
+            if (!optionalProfile.isPresent() || !optionalProfile.get().getUser().getUserId().equals(userId)){
                 throw new Exception("Profile with ID " + profileId + " not found");
             }
-            Profile profile = optionalProfile.get();
-            if (profile.isActive()){
+//            Profile profile = optionalProfile.get();
+            if (optionalProfile.get().isActive()){
                 throw new Exception("Profile with ID " + profileId + " already active");
+            }
+
+            List<Object> paymentObject = paymentRepository.AllPendingPaymentOfProfilesByUserid(userId, false);
+            List<PaymentDTO> paymentDTO = paymentConverter.PaymentObjectConvertToPaymentDTOs(paymentObject);
+            for(PaymentDTO paymentDTO1 : paymentDTO){
+                if (paymentDTO1.getProfileId().equals(profileId)){
+                    throw new Exception("Payment details already provided with Payment ID: " + paymentDTO1.getPaymentId());
+                }
             }
 
             long existingProfilesCount = profileRepository.countActiveProfilesByUserid(userId,true);
@@ -171,7 +179,7 @@ private ProfileConverter profileConverter;
 
             Payment payment = new Payment();
             payment.setUser(optionalUser.get());
-            payment.setProfile(profile);
+            payment.setProfile(optionalProfile.get());
             payment.setAmount(price);
             payment.setPaymentSuccess(false);
             paymentRepository.save(payment);
@@ -189,7 +197,7 @@ private ProfileConverter profileConverter;
                 Optional<ProfileDetailsDTO> profileDetailsDTO = profileConverter.convertProfileDetailsToDTO(profileInfoById);
                 return profileDetailsDTO;
             }else {
-                throw new UserNotFoundException("Profile with " + profileId + " not found");
+                throw new UserNotFoundException("Profile with ID " + profileId + " not found");
             }
         } catch (DataAccessException e) {
             throw new Exception("Error finding Profile by ID: " + e.getMessage());
@@ -236,9 +244,13 @@ private ProfileConverter profileConverter;
             if(optionalProfile.isPresent()){
                 Profile profile = optionalProfile.get();
                 profile.setActive(false);
-                List<PrescriptionInfoDTO> prescription = getAllPrescriptionInfo(userId,profileId);
-                if (!prescription.isEmpty()){
-                    deleteAllPrescriptionByProfileId(profileId);
+                try {
+                    List<PrescriptionInfoDTO> prescription = getAllPrescriptionInfo(userId,profileId);
+                    if (!prescription.isEmpty()){
+                        deleteAllPrescriptionByProfileId(profileId);
+                    }
+                }catch (Exception e){
+                    System.out.println("");
                 }
                 profileRepository.save(profile);
                 return "Profile successfully Inactivated with ID " + profileId;
