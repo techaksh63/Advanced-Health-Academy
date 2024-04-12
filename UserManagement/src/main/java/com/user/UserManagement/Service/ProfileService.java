@@ -164,30 +164,35 @@ private ProfileConverter profileConverter;
             long pendingPaymentProfileCount = paymentRepository.countPendingPaymentOfProfilesByUserid(userId,false);
 
             long profileCount = existingProfilesCount+pendingPaymentProfileCount;
-            long additionalProfileCost = 3;
-            long price = 5;
-
-
-            for (int i = 1; i <= profileCount; i++) {
-                if (i == 1) {
-                    price = 5;
-                } else {
-                    price += additionalProfileCost;
-                }
-            }
-
-
-            Payment payment = new Payment();
-            payment.setUser(optionalUser.get());
-            payment.setProfile(optionalProfile.get());
-            payment.setAmount(price);
-            payment.setPaymentSuccess(false);
+            Payment payment = getPayment(profileCount, optionalUser, optionalProfile);
             paymentRepository.save(payment);
 
             return paymentConverter.EntityToPaymentDTO(payment);
         } catch (DataAccessException e) {
             throw new Exception("Error saving profile: " + e.getMessage());
         }
+    }
+
+    private static Payment getPayment(long profileCount, Optional<User> optionalUser, Optional<Profile> optionalProfile) {
+        long additionalProfileCost = 3;
+        long price = 5;
+
+
+        for (int i = 1; i <= profileCount; i++) {
+            if (i == 1) {
+                price = 5;
+            } else {
+                price += additionalProfileCost;
+            }
+        }
+
+
+        Payment payment = new Payment();
+        payment.setUser(optionalUser.get());
+        payment.setProfile(optionalProfile.get());
+        payment.setAmount(price);
+        payment.setPaymentSuccess(false);
+        return payment;
     }
 
     public Optional<ProfileDetailsDTO> getProfileDetailsById(long userId, long profileId) throws Exception {
