@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="40cf8059-6a37-47fa-ab95-35e90c56dc95" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PrescriptionUpload/src/main/java/com/ADA/AdvancedHealthAcademy/AdvancedHealthAcademyApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/PrescriptionUpload/src/com/ADA/AdvancedHealthAcademy/AdvancedHealthAcademyApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PrescriptionUpload/src/main/java/com/ADA/AdvancedHealthAcademy/Controller/PrescriptionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/PrescriptionUpload/src/com/ADA/AdvancedHealthAcademy/Controller/PrescriptionController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PrescriptionUpload/src/main/java/com/ADA/AdvancedHealthAcademy/Controller/PrescriptionsUploadController.java" beforeDir="false" afterPath="$PROJECT_DIR$/PrescriptionUpload/src/com/ADA/AdvancedHealthAcademy/Controller/PrescriptionsUploadController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PrescriptionUpload/src/main/java/com/ADA/AdvancedHealthAcademy/Entity/Medicine.java" beforeDir="false" afterPath="$PROJECT_DIR$/PrescriptionUpload/src/com/ADA/AdvancedHealthAcademy/Entity/Medicine.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PrescriptionUpload/src/main/java/com/ADA/AdvancedHealthAcademy/Entity/Prescriptions.java" beforeDir="false" afterPath="$PROJECT_DIR$/PrescriptionUpload/src/com/ADA/AdvancedHealthAcademy/Entity/Prescriptions.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PrescriptionUpload/src/main/java/com/ADA/AdvancedHealthAcademy/Entity/PrescriptionsUpload.java" beforeDir="false" afterPath="$PROJECT_DIR$/PrescriptionUpload/src/com/ADA/AdvancedHealthAcademy/Entity/PrescriptionsUpload.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PrescriptionUpload/src/main/java/com/ADA/AdvancedHealthAcademy/Exceptions/ResourceNotFoundException.java" beforeDir="false" afterPath="$PROJECT_DIR$/PrescriptionUpload/src/com/ADA/AdvancedHealthAcademy/Exceptions/ResourceNotFoundException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PrescriptionUpload/src/main/java/com/ADA/AdvancedHealthAcademy/Exceptions/UploadException.java" beforeDir="false" afterPath="$PROJECT_DIR$/PrescriptionUpload/src/com/ADA/AdvancedHealthAcademy/Exceptions/UploadException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PrescriptionUpload/src/main/java/com/ADA/AdvancedHealthAcademy/Repository/PrescriptionsRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/PrescriptionUpload/src/com/ADA/AdvancedHealthAcademy/Repository/PrescriptionsRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PrescriptionUpload/src/main/java/com/ADA/AdvancedHealthAcademy/Repository/PrescriptionsUploadRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/PrescriptionUpload/src/com/ADA/AdvancedHealthAcademy/Repository/PrescriptionsUploadRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PrescriptionUpload/src/main/java/com/ADA/AdvancedHealthAcademy/Service/PrescriptionsService.java" beforeDir="false" afterPath="$PROJECT_DIR$/PrescriptionUpload/src/com/ADA/AdvancedHealthAcademy/Service/PrescriptionsService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PrescriptionUpload/src/main/java/com/ADA/AdvancedHealthAcademy/Service/PrescriptionsUploadService.java" beforeDir="false" afterPath="$PROJECT_DIR$/PrescriptionUpload/src/com/ADA/AdvancedHealthAcademy/Service/PrescriptionsUploadService.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHomeTypeForPersistence" value="WRAPPER" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8
+}</component>
+  <component name="ProjectId" id="2e1so47G2fAKcGp4QyJs13AckJu" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+    <option name="showMembers" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.AdvancedHealthAcademyApplication.executor": "Run",
+    "JUnit.AdvancedHealthAcademyApplicationTests.contextLoads.executor": "Run",
+    "JUnit.AdvancedHealthAcademyApplicationTests.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/home/qtech/Desktop/Aksh/OCR",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="com.ADA.AdvancedHealthAcademy.Controller" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.AdvancedHealthAcademyApplication">
+    <configuration name="AdvancedHealthAcademyApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.ADA.AdvancedHealthAcademy.AdvancedHealthAcademyApplication" />
+      <module name="AdvancedHealthAcademy" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.ADA.AdvancedHealthAcademy.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="AdvancedHealthAcademyApplicationTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="AdvancedHealthAcademy" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.ADA.AdvancedHealthAcademy.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.ADA.AdvancedHealthAcademy" />
+      <option name="MAIN_CLASS_NAME" value="com.ADA.AdvancedHealthAcademy.AdvancedHealthAcademyApplicationTests" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="AdvancedHealthAcademyApplicationTests.contextLoads" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="AdvancedHealthAcademy" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.ADA.AdvancedHealthAcademy.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.ADA.AdvancedHealthAcademy" />
+      <option name="MAIN_CLASS_NAME" value="com.ADA.AdvancedHealthAcademy.AdvancedHealthAcademyApplicationTests" />
+      <option name="METHOD_NAME" value="contextLoads" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.AdvancedHealthAcademyApplication" />
+        <item itemvalue="JUnit.AdvancedHealthAcademyApplicationTests.contextLoads" />
+        <item itemvalue="JUnit.AdvancedHealthAcademyApplicationTests" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="40cf8059-6a37-47fa-ab95-35e90c56dc95" name="Changes" comment="" />
+      <created>1711083589667</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1711083589667</updated>
+    </task>
+    <servers />
+  </component>
+</project>
